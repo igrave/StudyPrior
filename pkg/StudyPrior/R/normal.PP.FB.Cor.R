@@ -25,21 +25,16 @@ normal.PP.FB.COR <- function(x, sd,  verbose=FALSE, mixture.size=1000, d.prior.c
   v <- sd^2/D  #for convenience
   all.v <- apply(v, 2, function(V) 1/sum(1/V))
   
-  all.mean <-  sum(x/v) * all.v
-
-  factor <- 
+  all.mean <-   colSums(x/v) * all.v
   
-      
-  pars <- D %*% matrix(c(x, n-x), ncol=2) +1
+  pars <- matrix(c(all.mean, sqrt(all.v)), ncol=2)
   
   mix <- create.mixture.prior("normal", pars, weights=rep(1/mixture.size,mixture.size))
+
+  f <- function(p,X) eval.mixture.prior(p, mix)
+  
+  return(f)
 }
-
-
-f <- function(p,X) eval.mixture.prior(p, mix)
-
-return(f)
-
 #   
 #   
 #   if(d.prior.cor==1){#pooled case

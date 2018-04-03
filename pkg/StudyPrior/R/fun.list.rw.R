@@ -218,23 +218,45 @@ var.mixture.prior <- function(mixture.prior){
 #' @return A \code{mixture.prior} object
 #' @export
 #'
-posterior.mixture.prior <- function(xs, ns, mixture.prior){
+posterior.mixture.prior <- function(xs, ns, sd, mixture.prior){
   pars <- attr(mixture.prior,'pars')
-   
-  ps <- pars + matrix(c(xs,ns-xs),
-                      nrow=attr(mixture.prior,"degree"),
-                      ncol=2,
-                      byrow=TRUE)
-
-  if(length(xs)>1 | length(ns)>1) stop("posterior.mixture.prior is not vectorized for xs and ns.")
+  # new.pars <- pars 
+  old.weights <- attr(mixture.prior,'weights')
+  # new.weights <- numeric(length = length(old.weights))
   
-  lik <- dbetabinom.ab(x=xs, size=ns, shape1=pars[,1], shape2=pars[,2])
-  ws <- attr(mixture.prior,'weights')*lik
-  ws <- ws/sum(ws)
-
+  if(attr(mixture.prior,"type")=="beta"){
+    new.pars <- pars + matrix(c(xs,ns-xs),
+                              nrow=attr(mixture.prior,"degree"),
+                              ncol=2,
+                              byrow=TRUE)
+    
+    if(length(xs)>1 | length(ns)>1) stop("posterior.mixture.prior is not vectorized for xs and ns.")
+    
+    lik <- dbetabinom.ab(x=xs, size=ns, shape1=pars[,1], shape2=pars[,2])
+    ws <- old.weights*lik
+    new.weights <- ws/sum(ws)
+  
+    } else if(attr(mixture.prior,"type")=="normal"){
+      
+      all.sd <-  sqrt(1/( 1/pars[,2]^2 + 1/sd^2 ))
+      
+      all.mean <- (pars[,1]/pars[,2]^2  +  xs/sd^2 ) * all.sd^2
+      
+      new.pars <- matrix(c(all.mean,all.sd),
+                         nrow=attr(mixture.prior,"degree"),
+                         ncol=2,
+                         byrow=FALSE)
+      
+      ws  <- mapply(dnorm, x = xs, mean = pars[,1], sd = sqrt(pars[,2]^2+sd^2)) * old.weights
+      new.weights <- ws / sum(ws)
+       
+    }
+      
+  
+  
   flp <- update.mixture.prior(mixture.prior,
-                         pars=ps,
-                         weights= ws)
+                              pars=new.pars,
+                              weights= new.weights)
   return(flp)
 }
 

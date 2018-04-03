@@ -32,6 +32,9 @@ export(ess.mixture.prior)
 export(eval.mixture.prior)
 export(normal.PP.FB.INLA)
 export(normal.PP.FB.MC)
+export(normal.PP.EB)
+export(normal.PP.FB.COR)
+
 export(p.mixture.prior)
 
 export(posterior.mixture.prior)
@@ -40,6 +43,7 @@ export(sample.mixture.prior)
 export(sig.matrix)
 
 export(var.mixture.prior)
+export(plot.mixture.prior)
 
 importFrom(mvtnorm,rmvnorm)
 

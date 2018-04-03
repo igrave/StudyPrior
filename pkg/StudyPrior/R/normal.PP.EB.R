@@ -1,4 +1,14 @@
 
+#' Empirical Bayes power prior for normal likelihoods 
+#'
+#' @param x vector of historical means
+#' @param sd vector of historical standard deviations
+#' @param X new study mean
+#' @param SD new study standard deviation
+#'
+#' @return A density function of the mean parameter
+#' @export
+#'
 normal.PP.EB <- function(x, sd, X, SD){
 
   r <- 1 / sd^2
@@ -25,37 +35,25 @@ normal.PP.EB <- function(x, sd, X, SD){
                   lower = rep(0, n.hist),
                   upper = rep(1, n.hist))
 
-  d <- opt[1,seq(n.hist)]
+  d <- as.numeric(opt[1,seq(n.hist)])
   
-# See http://www.tina-vision.net/docs/memos/2003-003.pdf for product of gaussians
+# See http://www.tina-vision.net/docs/memos/2003-003.pdf for product of gaussian densities
 
-  # eq (4)
-all.sd2 <- 1/sum(r,R)
-all.mean <- sum()
+  # eq (4) and (5)
+all.sd2 <- 1/sum(r*d)
+all.mean <- sum(x*r*d) * all.sd2
   
-  function(mu){
 
-    dnorm(mu,
-          )
-    
-  1/sqrt(2*pi) *
-      dr <- d*r
-      sumdr <- sum(dr)
-      sumdrx <- sum(d*r*x)
-      sumdrX <- sum(d*r*X)
-
-      exp( - (R*(sumdrx - sumdrX)^2) /
-             (2*(sumdr)*(R+sumdr))) *
-        sqrt( (sumdr) / (R+sumdr) )
-    }
-
+# The density:
+  fun <- function(mu) dnorm(mu,all.mean, sqrt(all.sd2))  
+  
+  attr(fun, "parameters") <- list(x = x, sd = sd,
+                                  X = X, SD = SD,
+                                  d = d,
+                                  all.mean = all.mean,
+                                  all.sd2 = all.sd2,
+                                  optim = opt)
+  
+  fun
 } 
-
-
-x <-c(1,2,50,2.5)
-s <- c(1,1,1.4,0.8)
-a <- normal.PP.EB(x,s , 2.5, 1.2)
-
-sum(a * x)
-
 
