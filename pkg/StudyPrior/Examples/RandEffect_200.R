@@ -43,7 +43,7 @@ mclapply(mc.cores=20, recalc, function(i){
   F.SGL <- binom.prior("PP.EB", x = sum(x), n=sum(n), X=0:Ns, N=Ns, verbose=FALSE, mc.cores=1)
   cat(i,".........\n")
   save(F.MFP, F.PFP,F.PEP,F.FX0, F.COR, F.PSP, F.SGL, n,x,
-       file=paste0("Fix-51/models_f_",i,".rda"))
+       file=paste0("Rand-51/models_f_",i,".rda"))
 }
 )
 
