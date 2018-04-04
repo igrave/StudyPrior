@@ -192,7 +192,13 @@ calc1 <- function(i){
 }
 
 
-if(FALSE)  mclapply(1:1000,calc1, mc.cores=40)
+
+
+TF <- rep(FALSE,1000)
+for(i in 1:1000) TF[i] <-  !file.exists(paste0("Rand-51/study_Rand_",i,".rda"))
+recalc <- which(TF)
+
+if(TRUE)  mclapply(recalc,calc1, mc.cores=30)
 
 
 # For new priors  -------------------------------------------------
@@ -269,6 +275,13 @@ calc <- function(i){
 
 
 
-mclapply(1:1000, calc, mc.cores=20)
+TF2 <- rep(FALSE,1000)
+for(i in 1:1000) TF2[i] <-  !file.exists(paste0("Rand-51/study_grand_",i,".rda"))
+recalc2 <- which(TF2)
+
+
+mclapply(recalc2, calc, mc.cores=30)
 
 }
+
+
