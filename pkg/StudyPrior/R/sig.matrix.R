@@ -37,11 +37,11 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
             # K <- K *integrate(post, lower=0, upper=1)$value
 
           } else if(inherits(prior, "mixture.prior")){
-            post.list <- posterior.mixture.prior(Xs, n.control, prior)
+            post.list <- posterior.mixture.prior(Xs, n.control,  mixture.prior=prior)
             function(p) eval.mixture.prior(p, post.list)
 
           } else if(inherits(prior, "list")){
-            post.list <- posterior.mixture.prior(Xs, n.control, prior[[Xs+1]])
+            post.list <- posterior.mixture.prior(Xs, n.control,  mixture.prior=prior[[Xs+1]])
             function(p) eval.mixture.prior(p, post.list)
         }
         } else if(use.posterior) {

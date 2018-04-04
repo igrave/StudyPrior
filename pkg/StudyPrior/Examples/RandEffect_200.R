@@ -6,7 +6,7 @@ recalc <- 1:1000
 
 NH <- 200
 NN <- 50
-if(TRUE){
+if(FALSE){
 mclapply(mc.cores=20, recalc, function(i){
   # lapply( recalc, function(i){
   # for(i in recalc){
@@ -49,7 +49,7 @@ mclapply(mc.cores=20, recalc, function(i){
 
 }
 
-if(TRUE){
+if(FALSE){
 recalc <- 1:1000
 mclapply(mc.cores=20, recalc, function(i){
   # lapply( recalc, function(i){
@@ -190,7 +190,9 @@ calc1 <- function(i){
 
   })
 }
-mclapply(1:1000,calc1, mc.cores=40)
+
+
+if(FALSE)  mclapply(1:1000,calc1, mc.cores=40)
 
 
 # For new priors  -------------------------------------------------
@@ -267,6 +269,6 @@ calc <- function(i){
 
 
 
-mclapply(1:1000, calc, mc.cores=30)
+mclapply(1:1000, calc, mc.cores=20)
 
 }

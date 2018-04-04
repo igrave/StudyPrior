@@ -214,6 +214,7 @@ var.mixture.prior <- function(mixture.prior){
 #' @param xs Number of successes in new trial
 #' @param ns Number of patients in new trial
 #' @param mixture.prior Mixture prior object
+#' @param sd Standard deviation for normal model
 #'
 #' @return A \code{mixture.prior} object
 #' @export

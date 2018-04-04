@@ -34,10 +34,10 @@ calc.bias <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, posterio
         )
 
       } else if(inherits(prior, "mixture.prior")){
-        return(mean.mixture.prior(x=posterior.mixture.prior(Xs, n.binom, prior))-P)
+        return(mean.mixture.prior(x=posterior.mixture.prior(Xs, n.binom, mixture.prior=prior))-P)
 
       } else if(inherits(prior, "list")){
-        return(mean.mixture.prior(x=posterior.mixture.prior(Xs, n.binom, prior[[Xs+1]]))-P)
+        return(mean.mixture.prior(x=posterior.mixture.prior(Xs, n.binom,  mixture.prior=prior[[Xs+1]]))-P)
       }
     }, mc.cores=mc.cores)
     

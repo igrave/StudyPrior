@@ -41,11 +41,11 @@ calc.cis <- function(prior, level, n.control, posterior){
         # apply the smoothing
         return(CI)
       } else if (inherits(prior,"mixture.prior")){
-        q.mixture.prior(c((1-level)/2,1-(1-level)/2), posterior.mixture.prior(Xs, n.control, prior))
+        q.mixture.prior(c((1-level)/2,1-(1-level)/2), posterior.mixture.prior(Xs, n.control, mixture.prior= prior))
 
       } else if (inherits(prior,"list")){
-        # post <-function(p) eval.mixture.prior(p, posterior.mixture.prior(Xs, n.control, prior[[Xs+1]]))
-        q.mixture.prior(c((1-level)/2,1-(1-level)/2),posterior.mixture.prior(Xs, n.control, prior[[Xs+1]]))
+        # post <-function(p) eval.mixture.prior(p, posterior.mixture.prior(Xs, n.control,  mixture.prior=prior[[Xs+1]]))
+        q.mixture.prior(c((1-level)/2,1-(1-level)/2),posterior.mixture.prior(Xs, n.control,  mixture.prior=prior[[Xs+1]]))
       }
 
 
