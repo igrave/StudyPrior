@@ -31,15 +31,15 @@ binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=
                                 weights=rep(1/mixture.size,mixture.size))
     
     
-  } else if(d.prior.cor==0){#independent case
-    leng <- round(mixture.size^(1/n.hist))
-    mixture.size <- leng^n.hist
-    
-    D <- as.matrix(expand.grid(rep(list(seq(0,1,len=leng)),n.hist)))
-    pars <- D %*% matrix(c(x, n-x), ncol=2) +1
-      
-    mix <- create.mixture.prior("beta", pars, weights=rep(1/mixture.size,mixture.size))
-    
+  # } else if(d.prior.cor==0){#independent case
+  #   leng <- round(mixture.size^(1/n.hist))
+  #   mixture.size <- leng^n.hist
+  #   
+  #   D <- as.matrix(expand.grid(rep(list(seq(0,1,len=leng)),n.hist)))
+  #   pars <- D %*% matrix(c(x, n-x), ncol=2) +1
+  #     
+  #   mix <- create.mixture.prior("beta", pars, weights=rep(1/mixture.size,mixture.size))
+  #   
     
   } else{ #anything else
     sigma <- matrix(d.prior.cor, ncol=n.hist, nrow = n.hist)
