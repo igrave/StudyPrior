@@ -8,7 +8,7 @@ NH <- 100
 NN <- 75
 NT <- 200
 
-if(TRUE){
+if(FALSE){
 mclapply(mc.cores=30, recalc, function(i){
   # lapply( recalc, function(i){
   # for(i in recalc){
@@ -53,7 +53,7 @@ mclapply(mc.cores=30, recalc, function(i){
 
 if(TRUE){
 recalc <- 1:500
-mclapply(mc.cores=0, recalc, function(i){
+mclapply(mc.cores=30, recalc, function(i){
   # lapply( recalc, function(i){
   # for(i in recalc){
   print(i)
