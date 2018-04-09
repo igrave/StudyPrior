@@ -8,7 +8,7 @@ NH <- 100
 NN <- 75
 NT <- 200
 
-if(TRUE){
+if(FALSE){
 mclapply(mc.cores=20, recalc, function(i){
   # lapply( recalc, function(i){
   # for(i in recalc){
@@ -51,7 +51,7 @@ mclapply(mc.cores=20, recalc, function(i){
 
 }
 
-if(TRUE){
+if(FALSE){
 recalc <- 1:500
 mclapply(mc.cores=20, recalc, function(i){
   # lapply( recalc, function(i){
@@ -141,11 +141,11 @@ calc1 <- function(i){
       Calc.posterior.all, N=Ns, mc.cores=CORES
     )
 
-    posteriors2 <-
-      lapply(list(
-        F.MFP),
-        Calc.posterior.all, N=Ns, mc.cores=CORES
-      )
+    # posteriors2 <-
+    #   lapply(list(
+    #     F.MFP),
+    #     Calc.posterior.all, N=Ns, mc.cores=CORES
+    #   )
 
     mse <- lapply(posteriors,
       function(pr) calc.MSE.mean(posterior=pr, prob.range=c(0,1), length = 100, mc.cores=CORES, n.binom=Ns))
@@ -172,12 +172,12 @@ calc1 <- function(i){
 
 
     pow <- mclapply(SIGMAT,
-                    function(S) calc.power(sig.mat=S, n.binom.control = Ns,
+                    function(S) calc.power(sig.mat=S, n.binom.control = Ns,  n.binom.treatment = NT,
                                            prob.range = c(0,0.85), length =200, treatment.difference=0.12),
                     mc.cores=CORES)
 
     t1e <- mclapply(SIGMAT,
-                    function(S) calc.power(sig.mat=S, n.binom.control = Ns,
+                    function(S) calc.power(sig.mat=S, n.binom.control = Ns,  n.binom.treatment = NT,
                                            prob.range = c(0,0.9), length = 200, treatment.difference = 0),
                     mc.cores=CORES)
 
