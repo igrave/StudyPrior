@@ -1,5 +1,6 @@
 mean.variance <- matrix(0, nrow=101,ncol=8)
 Nrep<-9
+library(StudyPrior)
 library(parallel)
 sav.var <- 
 mclapply(mc.cores=30,1:1000, function(i){

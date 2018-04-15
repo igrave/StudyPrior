@@ -32,8 +32,6 @@ binom.PP.EB.Sep.Mix <- function(x, n, X, N, verbose=FALSE, p.prior.a=1, p.prior.
                  xh=x[i],
                  nh=n[i])$maximum
       })
-
-      VP(opd)
       opd
 })
   
