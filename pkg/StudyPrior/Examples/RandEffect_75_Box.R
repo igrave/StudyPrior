@@ -2,14 +2,14 @@ library(parallel)
 library(foreach)
 library(StudyPrior)
 inla.setOption(num.threads=2)
-recalc <- 1:500 + 500
+recalc <- 1:500
 
 NH <- 100
 NN <- 75
 NT <- 200
 
 if(FALSE){
-mclapply(mc.cores=30, recalc, function(i){
+mclapply(mc.cores=20, recalc, function(i){
   # lapply( recalc, function(i){
   # for(i in recalc){
   print(i)
@@ -51,9 +51,9 @@ mclapply(mc.cores=30, recalc, function(i){
 
 }
 
-if(TRUE){
-recalc <-500+( 1:500)
-mclapply(mc.cores=30, recalc, function(i){
+if(FALSE){
+recalc <- 1:500
+mclapply(mc.cores=20, recalc, function(i){
   # lapply( recalc, function(i){
   # for(i in recalc){
   print(i)
@@ -126,7 +126,7 @@ Calc.posterior.all <- function(prior, N, mc.cores){
 
 ####################################################
 CORES <- 1
-recalc <- 1:500 +500
+recalc <- 1:500
 
 calc1 <- function(i){
   print(i)
@@ -197,7 +197,7 @@ calc1 <- function(i){
 
 
 TF <- rep(FALSE,500)
-for(i in 500 + (1:500)) TF[i] <-  !file.exists(paste0("Rand-75/study_Rand_",i,".rda"))
+for(i in 1:500) TF[i] <-  !file.exists(paste0("Rand-75/study_Rand_",i,".rda"))
 recalc <- which(TF)
 
 if(TRUE)  mclapply(recalc,calc1, mc.cores=30)
@@ -205,7 +205,7 @@ if(TRUE)  mclapply(recalc,calc1, mc.cores=30)
 
 # For new priors  -------------------------------------------------
 CORES <- 1
-recalc <- 1:500 + 500
+recalc <- 1:500
 # recalc <- 501:750
 # recalc <- 751:1000
 
@@ -278,7 +278,7 @@ calc <- function(i){
 
 
 TF2 <- rep(FALSE,500)
-for(i in (1:500)+500) TF2[i] <-  !file.exists(paste0("Rand-75/study_grand_",i,".rda"))
+for(i in 1:500) TF2[i] <-  !file.exists(paste0("Rand-75/study_grand_",i,".rda"))
 recalc2 <- which(TF2)
 
 
