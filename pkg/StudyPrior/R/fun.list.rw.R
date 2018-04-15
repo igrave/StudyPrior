@@ -145,7 +145,7 @@ eval.mixture.prior2 <- function(x, mixture.prior, subset){
 
 plot.mixture.prior <- function(mixture.prior, x=seq(0,1, length=100), stack=FALSE, lines.only=FALSE, ...){
 
-  Y <- eval.mixture.prior(x, mixture.prior)
+  Y <- eval.mixture.prior(x=x, mixture.prior=mixture.prior)
   if(!lines.only) plot(x,Y, type='n', ...)
 
   if(stack==TRUE){
@@ -154,7 +154,7 @@ plot.mixture.prior <- function(mixture.prior, x=seq(0,1, length=100), stack=FALS
                decreasing = TRUE)
 
     for(i in 1:(attr(mixture.prior,"degree")-1)){
-        lines(x,eval.mixture.prior(x, mixture.prior,subset=z[1:i]), type='l', ...)
+        lines(x,eval.mixture.prior(x=x, mixture.prior=mixture.prior,subset=z[1:i]), type='l', ...)
     }
   }
   lines(x, Y, type='l', ...)
@@ -202,9 +202,15 @@ var.mixture.prior <- function(mixture.prior){
 
   mw <- m*w
   #by law of total variance for partitioned space
-  sum(v*w) +
-    sum(m^2*(1-w)*w) -
-    2* sum( unlist(sapply(2:length(m), function(i) sapply(1:(i-1), function(j) mw[i]*mw[j]))))
+  svw <- sum(v*w)
+  sm2w <- sum(m^2*(1-w)*w)
+  
+  # bigsum <- 2* sum( unlist(sapply(2:length(m), function(i) sapply(1:(i-1), function(j) mw[i]*mw[j]))))
+  mat <- outer(mw,mw)
+  diag(mat) <- 0
+  bigsum <- sum(mat)
+     svw + sm2w -  bigsum
+     
 }
 
 

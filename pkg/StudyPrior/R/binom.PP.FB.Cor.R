@@ -14,7 +14,7 @@
 #'
 #' @importFrom mvtnorm rmvnorm
 #'
-binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=0, p.prior.a=1, p.prior.b=1, mc.cores=1){
+binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=0, p.prior.a=1, p.prior.b=1, mc.cores=1, mix=FALSE){
   n.hist <- length(x)
   
   
@@ -26,7 +26,7 @@ binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=
     
     pars <- outer(D, c(sumx, sumnx))+1
     
-    mix <- create.mixture.prior("beta",
+    mixture <- create.mixture.prior("beta",
                                 pars,
                                 weights=rep(1/mixture.size,mixture.size))
     
@@ -49,12 +49,8 @@ binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=
     
     pars <- D %*% matrix(c(x, n-x), ncol=2) +1
     
-    mix <- create.mixture.prior("beta", pars, weights=rep(1/mixture.size,mixture.size))
+    mixture <- create.mixture.prior("beta", pars, weights=rep(1/mixture.size,mixture.size))
   }
   
-  
-  f <- function(p,X) eval.mixture.prior(p, mix)
-  
-  return(f)
-  
+  if(mix) return(mixture) else return(function(p,X) eval.mixture.prior(p, mixture))
 }
