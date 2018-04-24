@@ -143,6 +143,7 @@ eval.mixture.prior2 <- function(x, mixture.prior, subset){
 #' @export
 #'
 
+
 plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=FALSE){
   
   
@@ -152,13 +153,16 @@ plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=
   Y <- eval.mixture.prior(at, mixture.prior)
   if(!lines.only) plot(at,Y, type='n', ...)
 
+
   if(stack==TRUE){
     
     z <- order(attr(mixture.prior, "weights"),
                decreasing = TRUE)
 
     for(i in 1:(attr(mixture.prior,"degree")-1)){
-        lines(at,eval.mixture.prior(at, mixture.prior,subset=z[1:i]), type='l', ...)
+
+      lines(at,eval.mixture.prior(at, mixture.prior,subset=z[1:i]), type='l', ...)
+
     }
   }
   lines(at, Y, type='l', ...)
@@ -201,29 +205,25 @@ mean.mixture.prior <- function(x, ...){
 #' @export
 #'
 var.mixture.prior <- function(mixture.prior){
-  if(inherits(mixture.prior,"beta")) {
-    m <- apply(attr(mixture.prior,"pars"), 1, function(x) x[1]/sum(x))
-    v <- apply(attr(mixture.prior,"pars"), 1, function(x) x[1]*x[2]/( sum(x)^2 * (sum(x)+1) ))
-    w <- attr(mixture.prior,"weights")
-    
-    if(length(v)==1) return(v)
-    
-    mw <- m*w
-    #by law of total variance for partitioned space
-    sum(v*w) +
-      sum(m^2*(1-w)*w) -
-      2* sum( unlist(sapply(2:length(m), function(i) sapply(1:(i-1), function(j) mw[i]*mw[j]))))
+
+  m <- apply(attr(mixture.prior,"pars"), 1, function(x) x[1]/sum(x))
+  v <- apply(attr(mixture.prior,"pars"), 1, function(x) x[1]*x[2]/( sum(x)^2 * (sum(x)+1) ))
+  w <- attr(mixture.prior,"weights")
+
+  if(length(v)==1) return(v)
+
+  mw <- m*w
+  #by law of total variance for partitioned space
+  svw <- sum(v*w)
+  sm2w <- sum(m^2*(1-w)*w)
   
-    } else if(inherits(mixture.prior,"normal")) {
-      mu <- mean.mixture.prior(mixture.prior)
-      m  <- attr(mixture.prior,"pars")[,1]
-      sd <- attr(mixture.prior,"pars")[,2]
-      w  <- attr(mixture.prior,"weights")
-      
-      #variance
-      sum(w*(sd^2 + m^2)) - mu^2
-      
-    }
+  # bigsum <- 2* sum( unlist(sapply(2:length(m), function(i) sapply(1:(i-1), function(j) mw[i]*mw[j]))))
+  mat <- outer(mw,mw)
+  diag(mat) <- 0
+  bigsum <- sum(mat)
+     svw + sm2w -  bigsum
+     
+
 }
   
   

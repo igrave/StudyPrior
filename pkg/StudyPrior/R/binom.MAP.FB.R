@@ -25,7 +25,7 @@ binom.MAP.FB <- function(x, n, tau.prior, verbose=FALSE){
   result <- INLA::inla(formula,
                        data = dat,
                        family = "binomial",
-                       control.fixed = list(mean.intercept = 0, prec.intercept = 1/1000),
+                       control.fixed = list(mean.intercept = 0, prec.intercept = 1/sqrt(pi^2 /3)),
                        Ntrials=n,
                        control.predictor = list(compute=TRUE, link=1))
 
@@ -50,6 +50,11 @@ Y <- result$marginals.fitted.values[[n.hist+1]][,2]
                  c(0,0,0,Y,0,0,0),
                  method = "monoH")
 
+ f <-  splinefun(c(0, X,1),
+                 c(0,Y,0),
+                 method = "monoH")
+ 
+ 
   rm(dat, formula, n, n.hist, prior, result, tau.prior, verbose, x)
 
 

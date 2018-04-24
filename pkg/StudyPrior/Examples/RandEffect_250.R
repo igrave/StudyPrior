@@ -29,14 +29,14 @@ mclapply(mc.cores=20, recalc, function(i){
   cat(i,"..\n")
   # F.MEP <- binom.prior("MAP.EB", x = x, n=n, X=0:Ns, N=Ns, mc.cores=1, verbose=FALSE)
   cat(i,"...\n")
-  F.PFP <- binom.PP.FB.COR("PP.FB", x = x, n=n, mixture.size = 5000, d.prior.cor = 0)
+  F.PFP <- binom.PP.FB.COR("PP.FB", x = x, n=n, mixture.size = 1000, d.prior.cor = 0)
   ## With feedback
   cat(i,"....\n")
   F.PEP <- binom.prior("PP.EB", x = x, n=n, X=0:Ns, N=Ns, verbose=FALSE, mc.cores=1)
   cat(i,".....\n")
   F.FX0 <- binom.prior("PP.Fix", x = x, n=n, d=0)
   cat(i,"......\n")
-  F.COR <- binom.PP.FB.COR("PP.FB", x = x, n=n, mixture.size = 5000, d.prior.cor = 0.5)
+  F.COR <- binom.PP.FB.COR("PP.FB", x = x, n=n, mixture.size = 1000, d.prior.cor = 0.5)
   cat(i,".......\n")
   F.PSP <- binom.prior("PP.EB.Sep", x = x, n=n, X=0:Ns, N=Ns)
   cat(i,"........\n")
@@ -60,16 +60,16 @@ mclapply(mc.cores=20, recalc, function(i){
   N <- 5
   n <- rep(NH,N)
   
-  z <- rnorm(N, 0.65, 0.1)
+  z <- rnorm(N, 0.65, 0.05)
   
   x <- mapply(rbinom, size=n, n=1, prob=z)
   Xs <- rbinom(1,100,0.6)
   
   Ns <-NN
-  F.CR9 <- binom.PP.FB.COR("PP.FB", x = x, n=n, mixture.size = 5000, d.prior.cor = 0.9)
+  F.CR9 <- binom.PP.FB.COR("PP.FB", x = x, n=n, mixture.size = 1000, d.prior.cor = 0.9)
 print(".")
-  # F.C95 <- binom.prior("PP.Cor", x = x, n=n, d.prior.cor=0.95, samples=5000, length=512)
-  F.SUM <- binom.PP.FB.COR("PP.FB", x = sum(x), n=sum(n), mixture.size = 5000, d.prior.cor = 0)
+  # F.C95 <- binom.prior("PP.Cor", x = x, n=n, d.prior.cor=0.95, samples=1000, length=512)
+  F.SUM <- binom.PP.FB.COR("PP.FB", x = sum(x), n=sum(n), mixture.size = 1000, d.prior.cor = 0)
 print("..")
   F.ROB <- conj.approx(distr = binom.prior("MAP.FB", x = x, n=n),
                        type = "beta",

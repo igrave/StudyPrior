@@ -99,9 +99,10 @@ conj.approx <- function(distr,
     opt <-
       optimr::optimr(unlist(starts),
                      function(PAR){
-                       sum((dat$y-eval.mixture.prior(dat$x, update.mixture.prior(object = fl,
-                                                                                   pars=matrix(PAR[-(1:degree)],ncol=2),
-                                                                                   weights=PAR[1:degree])))^2)/length.fit
+                       sum((dat$y-eval.mixture.prior(x = dat$x,
+                                                     mixture.prior = update.mixture.prior(object = fl,
+                                                                                          pars=matrix(PAR[-(1:degree)],ncol=2),
+                                                                                          weights=PAR[1:degree])))^2)/length.fit
                      },
                      lower=unlist(lower.list),
                      upper=unlist(upper.list),
@@ -116,9 +117,10 @@ conj.approx <- function(distr,
       opt <-
         optimr::optimr(unlist(start.list),
                        function(PAR){
-                         sum((dat$y-eval.mixture.prior(dat$x, update.mixture.prior(object = fl,
-                                                                         pars=matrix(PAR[-(1:degree)],ncol=2),
-                                                                         weights=PAR[1:degree])))^2)/length.fit
+                         sum((dat$y-eval.mixture.prior(x = dat$x,
+                                                       mixture.prior = update.mixture.prior(object = fl,
+                                                                                            pars=matrix(PAR[-(1:degree)],ncol=2),
+                                                                                            weights=PAR[1:degree])))^2)/length.fit
                        },
                        lower=unlist(lower.list),
                        upper=unlist(upper.list),
@@ -134,9 +136,10 @@ conj.approx <- function(distr,
       opt <-
         optimr::optimr(start.rand,
                        function(PAR){
-                         sum((dat$y-eval.mixture.prior(dat$x, update.mixture.prior(object = fl,
-                                                                         pars=matrix(PAR[-(1:degree)],ncol=2),
-                                                                         weights=PAR[1:degree])))^2)/length.fit
+                         sum((dat$y-eval.mixture.prior(x = dat$x, 
+                                                       mixture.prior=update.mixture.prior(object = fl,
+                                                                                          pars=matrix(PAR[-(1:degree)],ncol=2),
+                                                                                          weights=PAR[1:degree])))^2)/length.fit
                        },
                        lower=unlist(lower.list),
                        upper=unlist(upper.list),
@@ -178,7 +181,7 @@ conj.approx <- function(distr,
                                     weights=opt$par[1:degree])
   
   #do plot if necessary
-  if(do.plot) plot.mixture.prior(plot.x, fl, stack=TRUE, lines.only=TRUE)
+  if(do.plot) plot.mixture.prior(mixture.prior=fl, x =plot.x, stack=TRUE, lines.only=TRUE)
 
   return(fl)
 }
