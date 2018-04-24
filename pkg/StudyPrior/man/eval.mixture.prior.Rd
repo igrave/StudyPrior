@@ -19,4 +19,3 @@ Densities at of prior at x
 \description{
 Get density of mixture
 }
-

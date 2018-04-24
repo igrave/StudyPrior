@@ -15,4 +15,3 @@ Sample size
 \description{
 Calculate the equivalent sample size of mixture model
 }
-
