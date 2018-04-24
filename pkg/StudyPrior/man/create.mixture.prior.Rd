@@ -19,4 +19,3 @@ A \code{mixture.prior} object
 \description{
 Create mixture model
 }
-

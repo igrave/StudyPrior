@@ -32,4 +32,3 @@ A matrix of TRUE/FALSE values of size n.control+1 x n.treatment+1
 \description{
 Calculate a matrix of significance test results for all possible values
 }
-

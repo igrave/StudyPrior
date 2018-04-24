@@ -30,4 +30,3 @@ A density function
 \description{
 Full Bayes Power Prior with Correlated Weight Parameters using Rao-Blackwell
 }
-

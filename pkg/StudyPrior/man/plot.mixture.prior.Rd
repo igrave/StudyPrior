@@ -4,21 +4,20 @@
 \alias{plot.mixture.prior}
 \title{Plot mixture model}
 \usage{
-\method{plot}{mixture.prior}(mixture.prior, x = seq(0, 1, length = 100),
-  stack = FALSE, lines.only = FALSE, ...)
+\method{plot}{mixture.prior}(x, ..., at = seq(0, 1, 0.01), stack = FALSE,
+  lines.only = FALSE)
 }
 \arguments{
-\item{mixture.prior}{Mixture prior}
+\item{x}{a mixture prior object to plot}
 
-\item{x}{Vector of values to evaluate density at}
+\item{...}{Additional arguments to \code{\link{lines}}}
+
+\item{at}{Vector of values to evaluate density at}
 
 \item{stack}{Plot the mixture components as stacked regions}
 
 \item{lines.only}{Draw lines only (to be used over an existing plot)}
-
-\item{...}{Additional arguments to \code{\link{lines}}}
 }
 \description{
 Plot mixture model
 }
-

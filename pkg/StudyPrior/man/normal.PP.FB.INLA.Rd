@@ -19,4 +19,3 @@ A density function
 \description{
 Normal power prior with full Bayes by INLA
 }
-

@@ -25,4 +25,3 @@ Probability density function for paramater p
 \description{
 Fixed Weight Power Prior for Binomial Data
 }
-

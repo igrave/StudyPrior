@@ -27,4 +27,3 @@ A function of the probability parmater p
 \description{
 Empirical Bayes Meta-Analytic Prior for Binomial Data
 }
-

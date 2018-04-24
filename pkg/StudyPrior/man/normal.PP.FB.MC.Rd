@@ -32,4 +32,3 @@ Density function
 \description{
 Normal power prior with full Bayes by Monte Carlo
 }
-

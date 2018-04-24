@@ -15,4 +15,3 @@ Variance of prior
 \description{
 Calculate the variance of mixture model
 }
-

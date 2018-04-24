@@ -21,4 +21,3 @@ A function of the probability parmater p
 \description{
 Full Bayes Bias Prior for Binomial Data
 }
-

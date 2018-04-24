@@ -17,4 +17,3 @@ A vector of n samples from \code{mixture.prior}
 \description{
 Sample from the mixture distribution
 }
-

@@ -12,4 +12,3 @@ VP(message)
 \description{
 Print messages if verbose=TRUE in calling function.
 }
-

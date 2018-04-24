@@ -19,4 +19,3 @@ Nothing
 \description{
 Plot a boolean matrix in two colours
 }
-

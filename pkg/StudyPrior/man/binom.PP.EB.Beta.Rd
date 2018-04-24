@@ -23,4 +23,3 @@ A function of the probability parmater p
 \description{
 Power Prior for Binomial Data Using Empirical Bayes on Beta Prior on Weights
 }
-

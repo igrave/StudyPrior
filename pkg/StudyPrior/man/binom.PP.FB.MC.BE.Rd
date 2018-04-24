@@ -37,4 +37,3 @@ A density function
 \description{
 Full Bayes Power Prior with Beta Prior on Weights
 }
-

@@ -25,4 +25,3 @@ A vector of coverage values
 \description{
 Coverage of Posterior using local smoothing with beta kernels
 }
-
