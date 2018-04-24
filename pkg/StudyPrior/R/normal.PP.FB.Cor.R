@@ -1,13 +1,11 @@
 #' Full Bayes Power Prior with Correlated Weight Parameters using Rao-Blackwell
 #'
-#' @param x number of historical successes
-#' @param n number historical patients
+#' @param x vector of means of historical studies
 #' @param verbose Print messages
 #' @param mixture.size Number of components in the mixture. If d.prior.cor=0, will be rounded to nearest value a^length(x) to make the grid evenly spaced.
 #' @param mc.cores Number of cores for parallel
-#' @param p.prior.a shape1 parameter for initial beta prior on probability
-#' @param p.prior.b shape2 parameter for initial beta prior on probability
 #' @param d.prior.cor Correlation parameter for transformed multivariate normal prior on weights
+#' @param sd vector of standard deviations of historical studies
 #'
 #' @return A density function
 #' @export
