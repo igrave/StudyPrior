@@ -19,4 +19,3 @@ The posterior density function
 \description{
 Calculate a posterior density based on a binomial likelihood
 }
-

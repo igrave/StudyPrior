@@ -16,14 +16,14 @@
 #'
 
 calc.power <- function(prior, prob.range=c(.5,.9), length=20, n.binom.control=30,
-                       n.binom.treatment=n.binom.control, treatment.difference=0.1, level=0.95, sig.mat, mc.cores=1){
+                       n.binom.treatment=n.binom.control, treatment.difference=0.1, level=0.95, sig.mat){
 # the probability to detect a given true difference
 # detection by
   if(treatment.difference+prob.range[2] > 1) stop("Unable to calculate power for difference at upper end of probability range (prob.range+treatment.difference > 1).")
 
   if(missing(sig.mat)) sig.mat <- sig.matrix(n.binom.control,
                                              n.binom.treatment, level, prior,
-                                             treat.beta.prior.par=c(1,1), mc.cores=mc.cores)
+                                             treat.beta.prior.par=c(1,1))
 
 
   probs <- sapply(seq(prob.range[1],prob.range[2], len=length),

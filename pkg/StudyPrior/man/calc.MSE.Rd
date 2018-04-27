@@ -26,4 +26,3 @@ A vector of error values
 \description{
 Calculate mean squared error
 }
-

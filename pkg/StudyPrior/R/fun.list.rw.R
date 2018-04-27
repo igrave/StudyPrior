@@ -38,7 +38,7 @@ create.mixture.prior <- function(type, pars, weights=rep(1/nrow(pars),nrow(pars)
     attr(mix,"degree") <- length(attr(mix,"weights"))
   } else(stop("Degree mismatch between weights and parameters"))
   
-  class(mix) <- "mixture.prior"
+  class(mix) <- c("mixture.prior", type)
   return(mix)
 }
 
@@ -134,8 +134,8 @@ eval.mixture.prior2 <- function(x, mixture.prior, subset){
 
 #' Plot mixture model
 #'
-#' @param x Vector of values to evaluate density at
-#' @param mixture.prior Mixture prior
+#' @param x a mixture prior object to plot
+#' @param at Vector of values to evaluate density at
 #' @param stack Plot the mixture components as stacked regions
 #' @param lines.only Draw lines only (to be used over an existing plot)
 #' @param ... Additional arguments to \code{\link{lines}}
@@ -143,10 +143,16 @@ eval.mixture.prior2 <- function(x, mixture.prior, subset){
 #' @export
 #'
 
-plot.mixture.prior <- function(mixture.prior, x=seq(0,1, length=100), stack=FALSE, lines.only=FALSE, ...){
 
-  Y <- eval.mixture.prior(x=x, mixture.prior=mixture.prior)
-  if(!lines.only) plot(x,Y, type='n', ...)
+plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=FALSE){
+  
+  
+  mixture.prior <- x
+  
+  
+  Y <- eval.mixture.prior(at, mixture.prior)
+  if(!lines.only) plot(at,Y, type='n', ...)
+
 
   if(stack==TRUE){
     
@@ -154,10 +160,12 @@ plot.mixture.prior <- function(mixture.prior, x=seq(0,1, length=100), stack=FALS
                decreasing = TRUE)
 
     for(i in 1:(attr(mixture.prior,"degree")-1)){
-        lines(x,eval.mixture.prior(x=x, mixture.prior=mixture.prior,subset=z[1:i]), type='l', ...)
+
+      lines(at,eval.mixture.prior(at, mixture.prior,subset=z[1:i]), type='l', ...)
+
     }
   }
-  lines(x, Y, type='l', ...)
+  lines(at, Y, type='l', ...)
 }
 
 #' Calculate the equivalent sample size of mixture model
@@ -168,7 +176,7 @@ plot.mixture.prior <- function(mixture.prior, x=seq(0,1, length=100), stack=FALS
 #' @export
 #'
 ess.mixture.prior <- function(mixture.prior){
-    sum(attr(mixture.prior,"weights")%*% attr(mixture.prior,"pars"))
+  if(inherits(mixture.prior,"beta")) sum(attr(mixture.prior,"weights")%*% attr(mixture.prior,"pars")) else NA
 }
 
 
@@ -182,8 +190,11 @@ ess.mixture.prior <- function(mixture.prior){
 #'
 
 mean.mixture.prior <- function(x, ...){
-  as.numeric((attr(x,"pars")[,1]/rowSums(attr(x,"pars"))) %*% attr(x,"weights"))
-  
+  if(inherits(x,"beta")) {
+    as.numeric((attr(x,"pars")[,1]/rowSums(attr(x,"pars"))) %*% attr(x,"weights"))
+  } else if(inherits(x,"normal")) {
+    as.numeric(attr(x,"pars")[,1] %*% attr(x,"weights"))
+  }
 }
 
 #' Calculate the variance of mixture model
@@ -194,6 +205,7 @@ mean.mixture.prior <- function(x, ...){
 #' @export
 #'
 var.mixture.prior <- function(mixture.prior){
+
   m <- apply(attr(mixture.prior,"pars"), 1, function(x) x[1]/sum(x))
   v <- apply(attr(mixture.prior,"pars"), 1, function(x) x[1]*x[2]/( sum(x)^2 * (sum(x)+1) ))
   w <- attr(mixture.prior,"weights")
@@ -211,12 +223,13 @@ var.mixture.prior <- function(mixture.prior){
   bigsum <- sum(mat)
      svw + sm2w -  bigsum
      
+
 }
-
-
-
-#' Calculate posterior mixture model
-#'
+  
+  
+  
+  #' Calculate posterior mixture model
+  #'
 #' @param xs Number of successes in new trial
 #' @param ns Number of patients in new trial
 #' @param mixture.prior Mixture prior object
@@ -231,7 +244,7 @@ posterior.mixture.prior <- function(xs, ns, sd, mixture.prior){
   old.weights <- attr(mixture.prior,'weights')
   # new.weights <- numeric(length = length(old.weights))
   
-  if(attr(mixture.prior,"type")=="beta"){
+  if(inherits(mixture.prior,"beta")){
     new.pars <- pars + matrix(c(xs,ns-xs),
                               nrow=attr(mixture.prior,"degree"),
                               ncol=2,
@@ -243,7 +256,7 @@ posterior.mixture.prior <- function(xs, ns, sd, mixture.prior){
     ws <- old.weights*lik
     new.weights <- ws/sum(ws)
   
-    } else if(attr(mixture.prior,"type")=="normal"){
+    } else if(inherits(mixture.prior,"normal")){
       
       all.sd <-  sqrt(1/( 1/pars[,2]^2 + 1/sd^2 ))
       
@@ -304,19 +317,28 @@ sample.mixture.prior <- function(n, mixture.prior){
   p <- attr(mixture.prior, "pars")
   degree <-  attr(mixture.prior, "degree")
   each.dist <- sample(1:degree, size=n, replace=TRUE, prob=w)
-  unlist(
-    sapply(1:degree, function(d){
-    rbeta(sum(each.dist==d), shape1=p[d,1], shape2=p[d,2])
-  }))
+  
+  if(inherits(mixture.prior,"beta")) {
+    unlist(
+      sapply(1:degree, function(d){
+        rbeta(sum(each.dist==d), shape1=p[d,1], shape2=p[d,2])
+      }))
+  }
+  
+  if(inherits(mixture.prior,"normal")) {
+    unlist(
+      sapply(1:degree, function(d){
+        rnorm(sum(each.dist==d), mean=p[d,1], sd=p[d,2])
+      }))}
 }
-
+  
 
 #' Probabilty function
 #'
 #' @param q Quantile
 #' @param mixture.prior Mixture prior object
 #'
-#' @return Vectore of probabilities
+#' @return Vector of probabilities
 #' @export
 #'
 p.mixture.prior <- function(q, mixture.prior){
@@ -324,8 +346,10 @@ p.mixture.prior <- function(q, mixture.prior){
   L <- attr(mixture.prior,"degree")
   p <- attr(mixture.prior,"pars")
   
+  PFUN <- if(inherits(mixture.prior,"beta")) pbeta else if (inherits(mixture.prior,"normal")) pnorm
+  
   sapply(q, function(q){
-    w%*% pbeta(q, p[,1],p[,2])
+    w%*% PFUN(q, p[,1],p[,2])
     })
 }
 
@@ -340,11 +364,24 @@ p.mixture.prior <- function(q, mixture.prior){
 #' @export
 #'
 q.mixture.prior <- function(p, mixture.prior){
+  if(any(p > 1 | p < 0)) stop("p must be between 0 and 1")
+  
+
+  
   sapply(p, function(p){
+    #special cases
+    if(inherits(mixture.prior,"beta")){
+      if(p == 0) return(0)
+      if(p == 1) return(1)
+    } else if (inherits(mixture.prior,"normal")){
+      if(p == 0) return(-Inf)
+      if(p == 1) return(Inf)
+    } 
+    
     # optimise( function(q){(p.mixture.prior(q,mixture.prior)-p)^2},
               # interval=c(0,1))$minimum
     uniroot(function(q) (p.mixture.prior(q,mixture.prior)-p),
-            interval=c(0,1))$root
+            interval=c(0,1), extendInt = "yes")$root
   })
 }
 

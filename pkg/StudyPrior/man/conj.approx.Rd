@@ -35,4 +35,3 @@ Returns a mixture.prior object
 \description{
 Approximate distribution with mixture model
 }
-

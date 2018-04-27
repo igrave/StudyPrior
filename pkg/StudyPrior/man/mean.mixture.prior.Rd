@@ -17,4 +17,3 @@ Mean of prior
 \description{
 Calculate the mean of mixture model
 }
-

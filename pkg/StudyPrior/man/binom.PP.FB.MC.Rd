@@ -32,4 +32,3 @@ A density function
 \description{
 Full Bayes Power Prior
 }
-

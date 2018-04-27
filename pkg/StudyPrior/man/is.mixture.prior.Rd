@@ -15,4 +15,3 @@ TRUE if \code{x} is a \code{mixture.prior}, else FALSE
 \description{
 Test if object is a mixture.prior
 }
-

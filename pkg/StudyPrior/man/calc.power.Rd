@@ -33,4 +33,3 @@ Vector or power values
 \description{
 Calculate power
 }
-

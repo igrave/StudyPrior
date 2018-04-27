@@ -21,4 +21,3 @@ A function of the probability parmater p
 \description{
 Full Bayesian Meta-Analytic Prior for Binomial Data
 }
-

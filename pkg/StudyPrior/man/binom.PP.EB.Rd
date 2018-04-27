@@ -30,4 +30,3 @@ A function of the probability parmater p
 \description{
 Empirical Bayes Power Prior for Binomial Data
 }
-

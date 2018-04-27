@@ -19,4 +19,3 @@ A function of the probability parmater p
 \description{
 Empirical Bayes Beta Prior for Binomial Data
 }
-

@@ -24,4 +24,3 @@ A density function
 \description{
 Prior distribution for binomial data
 }
-

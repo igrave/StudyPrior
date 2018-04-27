@@ -17,4 +17,3 @@ Vector of quantiles
 \description{
 Quantile function
 }
-

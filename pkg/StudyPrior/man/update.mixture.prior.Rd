@@ -21,4 +21,3 @@ A \code{mixture.prior} object with updated weights and parameters
 \description{
 Update parameters or weights in mixture model
 }
-

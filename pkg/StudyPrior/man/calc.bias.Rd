@@ -28,4 +28,3 @@ A vector of bias values
 \description{
 Calculate bias
 }
-
