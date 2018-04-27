@@ -1,4 +1,4 @@
-mean.variance <- matrix(0, nrow=101,ncol=8)
+mean.variance <- matrix(0, nrow=101,ncol=9)
 Nrep<-9
 library(StudyPrior)
 library(parallel)
@@ -22,10 +22,15 @@ mclapply(mc.cores=30,1:1000, function(i){
   binom.PP.FB.COR(xh, nh, d.prior.cor = 1, mix=TRUE) -> f
   
   binom.MAP.FB(xh, nh) -> map.1
-  conj.approx(distr = map.1,type = 'beta', max.degree = 3) -> g
-  conj.approx(distr = map.1,type = 'beta', max.degree = 3, robust=0.5) -> h
+  conj.approx(distr = map.1,type = 'beta', max.degree = 10) -> g
   
-  list.prior <- list(a,b,c,d,e,f,g,h)
+  create.mixture.prior("beta",
+                       pars = rbind(attr(g,"pars"),c(1,1)),
+                       weights = c(0.5*attr(g,"weights"),0.5)) -> h
+
+  create.mixture.prior("beta",pars=matrix(c(1,1),ncol=2))->i
+  
+  list.prior <- list(a,b,c,d,e,f,g,h,i)
   
   
   lapply(list.prior, function(priors){
@@ -46,18 +51,28 @@ mclapply(mc.cores=30,1:1000, function(i){
 })
 
 save(file="testingVariance.rda", sav.var)
+for(i in 1:1000) mean.variance <- mean.variance+ sav.var[[i]]/1000
 
-str(sav.var)
-for(i in 1:6) mean.variance <- mean.variance+ sav.var[[i]]/6 
+pdf()
+png()
+plot(sav.var[[1]][,7], ty='n', ylim=c(0,0.01))
+for(i in 1:1000){
+  lines(sav.var[[i]][,7], col=rgb(0,0,0,0.1))
+  lines(sav.var[[i]][,8], col=rgb(0,0,1,0.1))
+}
+dev.off()
 
-matplot(mean.variance, ty='l', col=1:8, lty=1)
-legend("topleft", col=1:8, legend = letters[1:8], lty=1)
+lapply(sav.var, function(x) any(x[,7]>0.006)) -> largevar
+
+which(unlist(largevar)) -> strange.i
+
+matplot(mean.variance, ty='l', col=1:9, lty=1)
+legend("topleft", col=1:9, legend = letters[1:9], lty=1)
 
 var.mixture.prior <- compiler::cmpfun(var.mixture.prior)
 
 str(variances)
-  
-  matplot(variances, ty='l', col=1:8, lty=1)
+  matplot(variances, ty='l', col=1:8, lty=1, ylim = c(0,0.01))
   legend("topleft", col=1:8, legend = letters[1:8], lty=1)
   
 system.time(sapply(1:101, function(i) var.mixture.prior(list.posterior[[4]][[i]]))) 
