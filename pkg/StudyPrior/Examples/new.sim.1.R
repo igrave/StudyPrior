@@ -22,7 +22,7 @@ gen.models <- function(i){
   N <- 5
   n <- rep(NH,N)
   
-  z <- rnorm(N, 0.65, 0.05)
+  z <- rnorm(N, 0.65, seq(0.05,0.1,len=5))
   
   x <- mapply(rbinom, size=n, n=1, prob=z)
   
