@@ -71,7 +71,7 @@ calc.oc <- function(I){
    ess <- lapply(list.posterior, function(p) sapply(p, ess.mixture.prior))
     
     mse <- lapply(list.posterior,
-                  function(pr) {print("A");calc.MSE.mean(posterior=pr, prob.range=c(0,1), length = 100,  n.binom=NN)})
+                  function(pr) calc.MSE.mean(posterior=pr, prob.range=c(0,1), length = 100,  n.binom=NN))
     
   
     bias <- lapply(list.posterior,
@@ -100,8 +100,8 @@ calc.oc <- function(I){
 }
 
 
-mclapply(1:1000, gen.models, mc.cores=20)
-calc.oc(1:1000, gen.models, mc.cores=30)
+# mclapply(1:1000, gen.models, mc.cores=20)
+# mclapply(1:1000, calc.oc, mc.cores=30)
   
   
   
