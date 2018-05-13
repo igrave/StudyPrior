@@ -45,9 +45,13 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
             function(p) eval.mixture.prior(p, post.list)
         }
         } else if(use.posterior) {
-            if(inherits(posterior[[1]],"mixture.prior"))  approxfun(seq(0,1,len=150),
-                                                                    eval.mixture.prior(seq(0,1,len=150),
-                                                                                       posterior[[Xs+1]]))
+            if(inherits(posterior[[1]],"mixture.prior")) {
+              function(p) eval.mixture.prior(p, posterior[[Xs+1]])
+              
+              # approxfun(seq(0.0001,.9999,len=150),
+                        # eval.mixture.prior(seq(0.0001,.9999,len=150),
+                        #                    posterior[[Xs+1]]))
+            } 
           else posterior[[Xs+1]]
           }
 
@@ -74,6 +78,7 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
           #     },
           #   lower=0,upper=1, rel.tol = tol, subdivisions = 200)
 
+          
           this.int.res <-  adaptIntegrate(
             function(p0) {
               pbeta(p0,
