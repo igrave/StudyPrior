@@ -103,6 +103,15 @@ calc.oc <- function(I){
 # mclapply(1:1000, gen.models, mc.cores=20)
 # mclapply(1:1000, calc.oc, mc.cores=30)
   
-  
-  
-  
+
+# TF2 <- rep(FALSE,1000)
+# for(I in 1:1000) TF2[I] <-  !file.exists(paste0('models_',formatC(I, width=4, flag="0"),'.rda'))
+# recalc2 <- which(TF2)
+# mclapply(recalc2, gen.models, mc.cores=20)
+#   
+
+
+TF3 <- rep(FALSE,1000)
+for(I in 1:1000) TF3[I] <-  !file.exists(paste0('oc_',formatC(I, width=4, flag="0"),'.rda'))
+recalc3 <- which(TF3)
+mclapply(recalc3, calc.oc, mc.cores=35)

@@ -15,7 +15,7 @@
 #' @export
 #'
 
-sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, treat.beta.prior.par=c(1,1), mc.cores=1, check.xt, check.xs) {
+sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, treat.beta.prior.par=c(1,1), mc.cores=1, check.xt, check.xs, eval2=FALSE, approx=TRUE) {
 
   if(missing(check.xt)) check.xt <- 0:n.treatment
   if(missing(check.xs)) check.xs <- 0:n.control
@@ -46,11 +46,11 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
         }
         } else if(use.posterior) {
             if(inherits(posterior[[1]],"mixture.prior")) {
-              function(p) eval.mixture.prior(p, posterior[[Xs+1]])
-              
-              # approxfun(seq(0.0001,.9999,len=150),
-                        # eval.mixture.prior(seq(0.0001,.9999,len=150),
-                        #                    posterior[[Xs+1]]))
+               if(eval2) {
+                 function(p) eval.mixture.prior2(p, posterior[[Xs+1]])
+               } else if(approx){
+                 approxfun(seq(0,1,len=300), eval.mixture.prior(seq(0,1,len=300), posterior[[Xs+1]]))
+               } else  function(p) eval.mixture.prior(p, posterior[[Xs+1]])
             } 
           else posterior[[Xs+1]]
           }
