@@ -28,9 +28,9 @@ gen.models <- function(I){
   
   xh <- mapply(rbinom, size=nh, n=1, prob=z)
   
-  binom.PP.EB.Mix(xh, nh, N=100) -> a
-  binom.PP.EB.Sep.Mix(xh, nh, N=100) -> b
-  binom.PP.EB.Mix(sum(xh), sum(nh), N=100) -> c
+  binom.PP.EB.Mix(xh, nh, N=NN) -> a
+  binom.PP.EB.Sep.Mix(xh, nh, N=NN) -> b
+  binom.PP.EB.Mix(sum(xh), sum(nh), N=NN) -> c
   binom.PP.FB.COR(xh, nh, d.prior.cor = 0, mix=TRUE) -> d
   binom.PP.FB.COR(xh, nh, d.prior.cor = .5, mix=TRUE) -> e
   binom.PP.FB.COR(xh, nh, d.prior.cor = 1, mix=TRUE) -> f
