@@ -5,7 +5,8 @@
 \title{Full Bayes Power Prior with Correlated Weight Parameters using Rao-Blackwell}
 \usage{
 binom.PP.FB.COR(x, n, verbose = FALSE, mixture.size = 1000,
-  d.prior.cor = 0, p.prior.a = 1, p.prior.b = 1, mc.cores = 1)
+  d.prior.cor = 0, p.prior.a = 1, p.prior.b = 1, mc.cores = 1,
+  mix = FALSE)
 }
 \arguments{
 \item{x}{number of historical successes}

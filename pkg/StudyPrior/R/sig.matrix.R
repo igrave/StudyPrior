@@ -22,6 +22,9 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
 
   use.posterior = !missing(posterior)
 
+  
+  if(treat.beta.prior.par == c(1,1) & use.posterior & inherits(posterior[[1]],"mixture.prior")) return(sigmat2(n.control, n.treatment, level, posterior, check.xs, check.xt))
+  
   ZZ.list <-   mclapply(check.xs,
     function(Xs){
       # print(Xs)
@@ -128,3 +131,61 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
   )
 
 }
+
+
+
+
+#' Analytical calculation for beta variables
+#'
+#' @param n.control 
+#' @param n.treatment 
+#' @param level 
+#' @param posterior 
+#' @param check.xs 
+#' @param check.xt 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+sigmat2 <- function(n.control, n.treatment, level, posterior, check.xs, check.xt){
+  
+    lapply(check.xs, function(xs){
+      par <- attr(posterior[[xs+1]],"pars")
+      w <- attr(posterior[[xs+1]],"weights")
+       apply(par,1, function(shape){
+        sapply(check.xt, function(xt) {
+          probXgrY(xt+1,n.treatment-xt+1, shape[[1]],shape[[2]])  
+        })#end xt
+      }) %*% w -> prob 
+       1-prob #end loop over mixture
+    }) -> all.probs#end xs
+
+  matrix(unlist(all.probs), nrow=length(check.xs),ncol = length(check.xt))
+}
+
+
+
+#' Probability that beta random variable is larger than another
+#'
+#' @param s parameter 1 of beta rv X
+#' @param t parameter 2 of beta rv X
+#' @param a parameter 1 of beta rv Y
+#' @param b parameter 2 of beta rv Y
+#'
+#' @return P(X > Y)
+#' @export
+#'
+#' @examples
+#' 
+probXgrY <- function(a,b,s,t){
+  sum(sapply(a:(a+b-1), function(j) choose(a+b-1, j) * beta(s+j+1, t+a+b-1-j)))
+}
+# probXgrY <- compiler::cmpfun(probXgrY)
+# 
+# sigmat3 <- compiler::cmpfun(sigmat2)
+# 
+# PRIOR <- binom.PP.FB.COR(x=c(45,45,60), n=c(150,150,150), mixture.size=1000,  mix=TRUE)
+# POST <- lapply(0:50, posterior.mixture.prior, ns=50, mixture.prior=PRIOR)
+# 
+# a <- sigmat2(n.control = 50, n.treatment = 5, level = 0.95, posterior = POST, check.xs=0:50, check.xt=0:5)

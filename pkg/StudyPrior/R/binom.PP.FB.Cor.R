@@ -8,6 +8,7 @@
 #' @param p.prior.a shape1 parameter for initial beta prior on probability
 #' @param p.prior.b shape2 parameter for initial beta prior on probability
 #' @param d.prior.cor Correlation parameter for transformed multivariate normal prior on weights
+#' @param mix return the mixture object
 #'
 #' @return A density function
 #' @export

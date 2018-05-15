@@ -5,7 +5,8 @@
 \title{Calculate a matrix of significance test results for all possible values}
 \usage{
 sig.matrix(n.control, n.treatment, level = 0.975, prior, posterior,
-  treat.beta.prior.par = c(1, 1), mc.cores = 1, check.xt, check.xs)
+  treat.beta.prior.par = c(1, 1), mc.cores = 1, check.xt, check.xs,
+  eval2 = FALSE, approx = TRUE)
 }
 \arguments{
 \item{n.control}{Number of patients in the control group}

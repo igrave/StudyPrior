@@ -6,7 +6,7 @@
 \usage{
 calc.power(prior, prob.range = c(0.5, 0.9), length = 20,
   n.binom.control = 30, n.binom.treatment = n.binom.control,
-  treatment.difference = 0.1, level = 0.95, sig.mat, mc.cores = 1)
+  treatment.difference = 0.1, level = 0.95, sig.mat, LR = FALSE)
 }
 \arguments{
 \item{prior}{Prior to calculate posterior}
@@ -25,7 +25,7 @@ calc.power(prior, prob.range = c(0.5, 0.9), length = 20,
 
 \item{sig.mat}{Precalculated significance matrix (See sig.matrix)}
 
-\item{mc.cores}{Number of cores for parallel}
+\item{LR}{Calculate the likelihood ratio of power/type I error}
 }
 \value{
 Vector or power values
