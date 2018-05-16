@@ -23,7 +23,7 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
   use.posterior = !missing(posterior)
 
   
-  if(treat.beta.prior.par == c(1,1) & use.posterior & inherits(posterior[[1]],"mixture.prior")) return(sigmat2(n.control, n.treatment, level, posterior, check.xs, check.xt))
+ if(treat.beta.prior.par == c(1,1) && use.posterior && inherits(posterior[[1]],"mixture.prior")) return(sigmat2(n.control, n.treatment, level, posterior, check.xs, check.xt))
   
   ZZ.list <-   mclapply(check.xs,
     function(Xs){
@@ -149,43 +149,46 @@ sig.matrix <- function(n.control, n.treatment, level=0.975, prior, posterior, tr
 #'
 #' @examples
 sigmat2 <- function(n.control, n.treatment, level, posterior, check.xs, check.xt){
-  
-    lapply(check.xs, function(xs){
-      par <- attr(posterior[[xs+1]],"pars")
-      w <- attr(posterior[[xs+1]],"weights")
-       apply(par,1, function(shape){
-        sapply(check.xt, function(xt) {
-          probXgrY(xt+1,n.treatment-xt+1, shape[[1]],shape[[2]])  
-        })#end xt
-      }) %*% w -> prob 
-       1-prob #end loop over mixture
-    }) -> all.probs#end xs
+  lapply(check.xs, function(xs){
+    # print(paste("XS",xs))
+    w <- attr(posterior[[xs+1]],"weights")
+    par <- attr(posterior[[xs+1]],"pars")
+    OK <- length(w) > 20
+    
+    sapply(check.xt, function(xt) {
+      prXY(xt+1,n.treatment-xt+1, par[,1],par[,2], approx.allowed=OK, force=TRUE)  %*% w
+    })-> prob 
+    # browser()
+    #these are too close
+    # print(1-prob)
+    redo <- (which(abs(1-prob-level)/level < 0.03))
+    #recalculate without approximation
 
-  matrix(unlist(all.probs), nrow=length(check.xs),ncol = length(check.xt))
-}
+    prob[redo] <- sapply(check.xt[redo], function(xt) {
+      prXY(xt+1,n.treatment-xt+1, par[,1],par[,2], approx.allowed=FALSE, force=FALSE)  %*% w
+    })
+    
+    prob
+    #end loop over mixture
+  }) -> all.probs #end xs
+  # browser()
+  matrix(1-unlist(all.probs)>level, nrow=length(check.xs),ncol = length(check.xt),byrow = TRUE)}
 
 
 
-#' Probability that beta random variable is larger than another
-#'
-#' @param s parameter 1 of beta rv X
-#' @param t parameter 2 of beta rv X
-#' @param a parameter 1 of beta rv Y
-#' @param b parameter 2 of beta rv Y
-#'
-#' @return P(X > Y)
-#' @export
-#'
-#' @examples
-#' 
-probXgrY <- function(a,b,s,t){
-  sum(sapply(a:(a+b-1), function(j) choose(a+b-1, j) * beta(s+j+1, t+a+b-1-j)))
-}
-# probXgrY <- compiler::cmpfun(probXgrY)
-# 
-# sigmat3 <- compiler::cmpfun(sigmat2)
-# 
-# PRIOR <- binom.PP.FB.COR(x=c(45,45,60), n=c(150,150,150), mixture.size=1000,  mix=TRUE)
-# POST <- lapply(0:50, posterior.mixture.prior, ns=50, mixture.prior=PRIOR)
-# 
-# a <- sigmat2(n.control = 50, n.treatment = 5, level = 0.95, posterior = POST, check.xs=0:50, check.xt=0:5)
+#Analytical (and fast approximation for) calculation  of probability beta RV is larger than another
+prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
+  if(force | (a>5 &&b>10 && approx.allowed)){ 
+    # cat("A")
+    #for large values do a normal approximation based on moments
+    pnorm((c/(c+d)-a/(a+b))/
+          sqrt(a*b/((a+b)^2 * (a+b+1)) + c*d/((c+d)^2 * (c+d+1))))
+  } else {
+    #finite sum of beta functions
+    sapply(1:length(c),function(i) {
+      j <- a:(a+b-1)
+         1 / beta(c[i],d[i]) * sum(choose(a+b-1,j)*beta(a+b+d[i]-j-1, c[i]+j))}
+         )
+    }
+  }
+

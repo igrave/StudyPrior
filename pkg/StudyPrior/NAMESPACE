@@ -43,6 +43,7 @@ export(posterior.mixture.prior)
 export(q.mixture.prior)
 export(sample.mixture.prior)
 export(sig.matrix)
+export(sigmat2)
 
 export(var.mixture.prior)
 export(plot.mixture.prior)
