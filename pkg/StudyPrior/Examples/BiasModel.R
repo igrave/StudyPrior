@@ -94,8 +94,9 @@ calc.oc <- function(I){
                     function(S) calc.power(sig.mat=S, n.binom.control = NN, n.binom.treatment = NT, 
                                            prob.range = c(0,0.9), length = 200, treatment.difference = 0))
  
+    
     save(file=paste0('oc_',formatC(I, width=4, flag="0"),'.rda'),
-         mse, bias, SIGMAT, pow, t1e,lr, xh,nh,  NH, NN, NT )  
+         ess,mse, bias, SIGMAT, pow, t1e,lr, xh,nh,  NH, NN, NT )
   })
 }
 
@@ -114,4 +115,5 @@ calc.oc <- function(I){
 TF3 <- rep(FALSE,1000)
 for(I in 1:1000) TF3[I] <-  !file.exists(paste0('oc_',formatC(I, width=4, flag="0"),'.rda'))
 recalc3 <- which(TF3)
-mclapply(recalc3, calc.oc, mc.cores=35)
+mclapply(recalc3, calc.oc, mc.cores=39, mc.preschedule = FALSE)
+
