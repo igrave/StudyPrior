@@ -163,7 +163,7 @@ PP.FB.55 <- binom.PP.FB.MC.BE(x=x.multi, n=n.multi, d.prior.a = .5, d.prior.b = 
 @
 Or have correlation between the weight parameters, which shows good operating characteristics.
 <<PPCOR>>=
-PP.FB.COR <- binom.PP.FB.MC.COR(x=x.multi, n=n.multi, d.prior.cor = 0.5)
+PP.FB.COR <- binom.PP.FB.COR(x=x.multi, n=n.multi, d.prior.cor = 0.5)
 @
 The empirical Bayes approach is also possible.
 <<PPEB>>=

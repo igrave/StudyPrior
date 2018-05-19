@@ -8,12 +8,13 @@
 #' @param mc.cores number of cores for parallel
 #' @param p.prior.a shape1 parameter of initial beta prior for successes
 #' @param p.prior.b shape2 parameter of initial beta prior for successes 
+#' @param mix if TRUE return a mixture.prior object otherwise the function
 #'
-#' @return A function of the probability parmater p
+#' @return Either a list of mixture.prior objects which can be evaluated with eval.mixture.prior or a density function of the probability parmater p given X.
 #' @export
 #'
 #'
-binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.prior.b=1){
+binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.prior.b=1, mix=FALSE){
   #if X isn't specified we calculate it for all, set flag too
   if(missing(X)) {
     X <- 0:N
@@ -51,10 +52,18 @@ binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.pr
 
     return(d)
   })
-
-  f <- function(p,X) {
-    d <- ds[[X+1]]
-    dbeta(p,p.prior.a + sum(x*d), p.prior.b + sum(d*(n-x)))
-  }
- return(f)
+ 
+ if(mix){ #return mixture object
+   return(
+     lapply(ds, function(d)
+       create.mixture.prior("beta", pars = matrix(c(p.prior.a + sum(x*d),p.prior.b + sum(d*(n-x))),nrow=1)
+     ))
+   ) 
+ } else{ #return simple function
+   f <- function(p,X) {
+     d <- ds[[X+1]]
+     dbeta(p,p.prior.a + sum(x*d), p.prior.b + sum(d*(n-x)))
+   }
+   return(f) 
+ }
 }

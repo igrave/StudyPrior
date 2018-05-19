@@ -6,7 +6,7 @@
 \usage{
 sig.matrix(n.control, n.treatment, level = 0.975, prior, posterior,
   treat.beta.prior.par = c(1, 1), mc.cores = 1, check.xt, check.xs,
-  eval2 = FALSE, approx = TRUE)
+  approx = TRUE)
 }
 \arguments{
 \item{n.control}{Number of patients in the control group}
@@ -26,9 +26,11 @@ sig.matrix(n.control, n.treatment, level = 0.975, prior, posterior,
 \item{check.xt}{Optional argument to specify which outcomes in the treament arm should be considered. Otherwise \code{0:n.treatment}}
 
 \item{check.xs}{Optional argument to specify which outcomes in the control arm should be considered. Otherwise \code{0:n.control}}
+
+\item{approx}{Use \code{approxfun} to approximate the posterior if a mixture.prior is supplied.}
 }
 \value{
-A matrix of TRUE/FALSE values of size n.control+1 x n.treatment+1
+A matrix of TRUE/FALSE values of dimensions (n.control+1, n.treatment+1) representing significant tests
 }
 \description{
 Calculate a matrix of significance test results for all possible values

@@ -24,6 +24,8 @@ binom.PP.FB.COR(x, n, verbose = FALSE, mixture.size = 1000,
 \item{p.prior.b}{shape2 parameter for initial beta prior on probability}
 
 \item{mc.cores}{Number of cores for parallel}
+
+\item{mix}{return the mixture object}
 }
 \value{
 A density function

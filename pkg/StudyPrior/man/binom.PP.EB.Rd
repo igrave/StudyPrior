@@ -5,7 +5,7 @@
 \title{Empirical Bayes Power Prior for Binomial Data}
 \usage{
 binom.PP.EB(x, n, X, N, verbose = FALSE, mc.cores = 1, p.prior.a = 1,
-  p.prior.b = 1)
+  p.prior.b = 1, mix = FALSE)
 }
 \arguments{
 \item{x}{number of historical successes}
@@ -23,9 +23,11 @@ binom.PP.EB(x, n, X, N, verbose = FALSE, mc.cores = 1, p.prior.a = 1,
 \item{p.prior.a}{shape1 parameter of initial beta prior for successes}
 
 \item{p.prior.b}{shape2 parameter of initial beta prior for successes}
+
+\item{mix}{if TRUE return a mixture.prior object otherwise the function}
 }
 \value{
-A function of the probability parmater p
+Either a list of mixture.prior objects which can be evaluated with eval.mixture.prior or a density function of the probability parmater p given X.
 }
 \description{
 Empirical Bayes Power Prior for Binomial Data

@@ -25,7 +25,7 @@ binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=
     D <- seq(0,1,len=mixture.size)
     
     
-    pars <- outer(D, c(sumx, sumnx))+1
+    pars <- outer(D, c(sumx, sumnx))+rep(c(p.prior.a,p.prior.b),each=mixture.size)
     
     mixture <- create.mixture.prior("beta",
                                 pars,
@@ -48,7 +48,7 @@ binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=
     
     D <- pnorm(rmvnorm(mixture.size, mean=rep(0,n.hist), sigma=sigma) )
     
-    pars <- D %*% matrix(c(x, n-x), ncol=2) +1
+    pars <- D %*% matrix(c(x, n-x), ncol=2) +rep(c(p.prior.a,p.prior.b),each=mixture.size)
     
     mixture <- create.mixture.prior("beta", pars, weights=rep(1/mixture.size,mixture.size))
   }
