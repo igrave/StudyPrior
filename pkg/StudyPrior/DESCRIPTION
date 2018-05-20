@@ -1,11 +1,13 @@
 Package: StudyPrior
 Type: Package
-Title: Distributions for Historical Information
-Version: 0.0.11
-Author: Isaac Gravestock
+Title: Construct Prior Distributions from Historical Information
+Version: 0.0.12
+Authors@R: c(person("Isaac", "Gravestock", role = c("aut", "cre"),
+                     email = "isaac.gravestock@uzh.ch",
+                      comment = c(ORCID = "0000-0003-0283-2065")))
 Maintainer: Isaac Gravestock <isaac.gravestock@uzh.ch>
 Description: Implements useful prior distributions for incorporating data from
-    previous studies into a new study, such as power priors, meta-analytic priors.
+    previous studies into a new study, such as meta-analytic priors and power priors.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -17,11 +19,12 @@ Imports:
     BB,
     mvtnorm
 Depends:
-    INLA,
     cubature
-Suggests: knitr
+Suggests: knitr, INLA
 Additional_repositories:
     https://inla.r-inla-download.org/R/stable
 VignetteBuilder: knitr 
 RoxygenNote: 6.0.1
 ByteCompile: true
+
+

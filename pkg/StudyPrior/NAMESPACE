@@ -42,6 +42,7 @@ export(q.mixture.prior)
 export(sample.mixture.prior)
 export(sig.matrix)
 
+export(install.inla)
 
 export(var.mixture.prior)
 export(plot.mixture.prior)
@@ -59,7 +60,5 @@ importFrom("stats", "approxfun", "dbeta", "dbinom", "dnorm",
 
 importFrom("cubature", "adaptIntegrate")
 
-importFrom("INLA", 'inla.dmarginal', 'inla.smarginal', 'f',
-           'inla.hpdmarginal', 'inla.mmarginal', 'inla')
 
 importFrom("VGAM", 'dbetabinom.ab')

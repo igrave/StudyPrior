@@ -13,6 +13,10 @@ binom.MAP.FB <- function(x, n, tau.prior, verbose=FALSE){
   n.hist <- length(x)
   dat <- data.frame(x=c(x,NA), n=c(n,NA), z=1:(n.hist+1))
 
+  
+  check.inla() #check for inla functions
+  
+  
   if(missing(tau.prior)){
     prior <-  list(prior= "logtnormal", param=c(0,1))
   } else {

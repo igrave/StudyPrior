@@ -11,8 +11,13 @@
 normal.PP.FB.INLA <- function(x, sd, verbose=FALSE ){
   n.hist <- length(x)
 
+  
+  check.inla() #check for inla functions
+  
+  
   A<-1
   B<-1
+  
   prior.function <- function(theta) ifelse(theta < log(1),
                                            log(dbeta(exp(theta),A,B)*exp(theta)),
                                            -theta-10000)

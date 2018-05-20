@@ -13,7 +13,9 @@ binom.Bias.FB <- function(x, n, verbose=FALSE,  mc.cores=1){
   n.hist <- length(x)
 
   dat <- data.frame(x, n, z=1:n.hist)
-
+  
+  check.inla() #check for inla functions
+  
   # if(missing(tau.prior)){
     prior <-  list(prior= "logtnormal", param=c(0,1))
   # } else {

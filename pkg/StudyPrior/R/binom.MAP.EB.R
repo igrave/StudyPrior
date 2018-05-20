@@ -15,7 +15,9 @@ binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
   n.hist <- length(x)
   n.new <- 0
 
-
+  
+  check.inla() #check for inla functions
+  
 
  f <- mcmapply(mc.cores=mc.cores,
                X=X, N=N,

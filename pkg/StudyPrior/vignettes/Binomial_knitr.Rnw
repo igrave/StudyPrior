@@ -18,8 +18,17 @@ This vignette shows the methods for trials with a binary outcome.
 
 StudyPrior implements a number of methods that are suitable for creating priors for the success probability $\theta$ based on a single historical study.
 If a previous study under similar conditions had 21 successes for 37 subjects, we can use this to construct a prior using power prior (PP) methodology.
-<<data>>=
+
+<<setup, echo=FALSE, message=FALSE, warning=FALSE>>=
 library(StudyPrior)
+if(require(INLA, quietly=TRUE)) INLA.available <-TRUE else{
+  INLA.available <- FALSE
+  print('INLA package not available. Examples using INLA will not be evaluated')
+} 
+
+@
+
+<<data>>=
 x <- 21
 n <- 37
 
@@ -149,11 +158,12 @@ Study & x & n & Success \\
 \end{table}
 
 With multiple historical studies, we can use the meta-analytic predictive prior of Schmidli et al. We specify the prior on the heterogeneity standard deviation in the format used by INLA. Here we use a truncated normal (which for INLA's purposes is defined on the log scale) with mean 0 and precision 1.
+
 <<MAP>>=
 x.multi <- c(21,33,23,27)
 n.multi <- c(37,50,40,50)
 
-MAP <- binom.MAP.FB(x.multi, n.multi, tau.prior = list(prior= "logtnormal", param=c(0,1)))
+if(INLA.available) MAP <- binom.MAP.FB(x.multi, n.multi, tau.prior = list(prior= "logtnormal", param=c(0,1)))
 @
 
 The power prior can also be extended to hand multiple studies. A full Bayes approach with an independent beta prior on the weight parameters.
@@ -174,7 +184,7 @@ PP.EB <- binom.PP.EB(x=x.multi, n=n.multi, X=0:n.new, N=n.new)
 \subsection{Approximation with Mixtures}
 We can approximate the priors with mixtures of densities. This makes calculations of posteriors and some operating characteristics very fast because analytical formulas are available. This is an approximation whose accuracy depends on the number of mixture components and can require some time to find all the parameters.
 
-<<approx>>=
+<<approx, echo=TRUE, eval=INLA.available>>=
 MAP.approx <- conj.approx(MAP, type="beta", max.degree = 3)
 
 curve(MAP, n=200, lty=1, lwd=2, ylab="Density", xlab=expression(theta))
@@ -200,7 +210,7 @@ BIAS.PP <- sapply(list(PP.FB.11, PP.FB.55, PP.FB.COR, PP.EB),
 @
 
 We can also use the mixture approximations in the same functions. Note how much faster the calculations are with the approximation.
-<<biasmap>>=
+<<biasmap, eval=INLA.available>>=
 system.time(BIAS.MAP <- calc.bias(MAP, prob.range = c(0.3,0.8),length=11,n.binom = 50))
 system.time(BIAS.APPROX <- calc.bias(MAP.approx, prob.range = c(0.3,0.8),length=11,n.binom = 50))
 @
@@ -213,8 +223,10 @@ lines(p,BIAS.PP[,2],  col="blue", lwd=2)
 lines(p,BIAS.PP[,3],  col="green", lwd=2)
 lines(p,BIAS.PP[,4],  col="orange", lwd=2)
 
+if(INLA.available){
 lines(p,BIAS.MAP,  col="black", lwd=2)
 lines(p,BIAS.APPROX,  col="cyan", lty=2, lwd=2)
+}
 
 legend("topright", col=c("red","blue","green", "orange", "black","cyan"), lty=1, lwd=2,
        legend=c("Full Bayes PP B(1,1)", "Full Bayes PP B(.5,.5)",
@@ -222,8 +234,8 @@ legend("topright", col=c("red","blue","green", "orange", "black","cyan"), lty=1,
 
 @
 
-For calculating coverage, we implement a smoothing technique based on beta kernels. We must specify a smoothing parameter. See Bayarri for more details.
-<<cover>>=
+For calculating coverage, we implement a smoothing technique based on beta kernels. We must specify a smoothing parameter. For more details, see Bayarri and Berger, 'The Interplay of Bayesian and Frequentist Analysis' (Statistical Science, 2004).
+<<cover, eval=INLA.available>>=
 COVER <- sapply(list(PP.FB.11, PP.FB.55, PP.FB.COR, PP.EB, MAP),
                   function(PRIOR) calc.coverage(PRIOR, level = 0.95,
                                                 smooth = 0.05, n.control = 50))

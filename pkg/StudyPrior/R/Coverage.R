@@ -28,6 +28,9 @@ calc.cis <- function(prior, level, n.control, posterior){
   if(is.null(posterior)){
     CIs <-  sapply(0:n.control, function(Xs){
       if(inherits(prior,"function")){
+        
+        check.inla() #check for inla functions
+        
         post <- function(p,k=1) prior(p, X=Xs)*dbinom(x=Xs, size=n.control, prob=p)/k
         f <- splinefun(smooth.spline(seq(0.0001,0.9999,len=1000), pmax(0,post(seq(.001,.999,len=1000)))))
         # print(Xs)
