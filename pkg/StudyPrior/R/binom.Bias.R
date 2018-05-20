@@ -22,8 +22,7 @@ binom.Bias.FB <- function(x, n, verbose=FALSE,  mc.cores=1){
   #   prior <- tau.prior
   # }
 
-  formula <- x ~ 1 + f(z, model="iid",
-                       hyper = list(prec = prior))
+  formula <- x ~ 1 + INLA::f(z, model="iid", hyper = list(prec = prior))
 
   result <- INLA::inla(formula,
                        data = dat,
@@ -32,12 +31,12 @@ binom.Bias.FB <- function(x, n, verbose=FALSE,  mc.cores=1){
                        Ntrials=n,
                        control.predictor = list(compute=TRUE, link=1))
 
-k <- integrate(Vectorize(function(p) prod(sapply(result$marginals.fitted.values, inla.dmarginal, x=p))),
+k <- integrate(Vectorize(function(p) prod(sapply(result$marginals.fitted.values, INLA::inla.dmarginal, x=p))),
                lower=0,
                upper=1)$value
 
 
-  f <- function(p) sapply(p, function(p) prod(sapply(result$marginals.fitted.values, inla.dmarginal, x=p))/k)
+  f <- function(p) sapply(p, function(p) prod(sapply(result$marginals.fitted.values, INLA::inla.dmarginal, x=p))/k)
 
 
 

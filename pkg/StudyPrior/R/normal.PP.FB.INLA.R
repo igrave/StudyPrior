@@ -37,7 +37,7 @@ normal.PP.FB.INLA <- function(x, sd, verbose=FALSE ){
 
   sca <- 1/sd^2
 
-  ifb <- inla(Y~1,
+  ifb <- INLA::inla(Y~1,
               data=list(Y=Y),
               family=fam,
               scale= sca,

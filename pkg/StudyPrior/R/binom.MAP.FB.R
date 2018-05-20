@@ -23,8 +23,7 @@ binom.MAP.FB <- function(x, n, tau.prior, verbose=FALSE){
     prior <- tau.prior
   }
 
-  formula <- x ~ 1 + f(z, model="iid",
-                       hyper = list(theta = prior))
+  formula <- x ~ 1 + INLA::f(z, model="iid", hyper = list(theta = prior))
 
   result <- INLA::inla(formula,
                        data = dat,

@@ -48,8 +48,7 @@ binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
       # prior <-  list(prior= "flat", param=numeric(0))
 
 
-      formula <- x ~ 1 + f(z, model="iid",
-                           hyper = list(theta = prior))
+      formula <- x ~ 1 + INLA::f(z, model="iid", hyper = list(theta = prior))
       ##########################################
 
 
@@ -64,7 +63,7 @@ binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
       
       result <- INLA::inla.hyperpar(result)
       
-      mode_tau <-  inla.mmarginal(INLA::inla.tmarginal(function(x) 1/x^.5,
+      mode_tau <-  INLA::inla.mmarginal(INLA::inla.tmarginal(function(x) 1/x^.5,
                                                        result$marginals.hyperpar[[1]],
                                                        n=2000)[50:1950,])
       
@@ -74,7 +73,7 @@ binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
       
       VXN <- mode_tau^2
       
-      formulaEB = x ~ 1 + f(z, model="iid",
+      formulaEB = x ~ 1 + INLA::f(z, model="iid",
                             hyper = list(theta = list(fixed=TRUE,
                                                       initial=log(1/VXN)#1/mode_tau$maximum
                             )))

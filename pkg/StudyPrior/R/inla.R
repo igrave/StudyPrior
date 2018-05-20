@@ -16,8 +16,8 @@ check.inla <- function(){
 install.inla <- function(testing=FALSE){
   INLA.url = if(testing) "https://inla.r-inla-download.org/R/testing" else "https://inla.r-inla-download.org/R/stable"
   
-  print(paste0("Installing INLA with: ",'install.packages("INLA", repos=c(getOption("repos"), INLA=',INLA.url,',dep=TRUE)'))
-  install.packages("INLA", repos=c(getOption("repos"), INLA=INLA.url), dep=TRUE)
+  print(paste0("Installing INLA with: install.packages('INLA', repos=c(getOption('repos'), INLA=",INLA.url,",dep=TRUE)"))
+  utils::install.packages("INLA", repos=c(getOption("repos"), INLA=INLA.url), dep=TRUE)
   return(requireNamespace("INLA"))
 }
 

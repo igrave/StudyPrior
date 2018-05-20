@@ -39,7 +39,7 @@ calc.cis <- function(prior, level, n.control, posterior){
         # get the confidence intervals
         P <- seq(0.00001,.99999,length.out = 1024)
         marg <- list(x=P, y=post(P, K))
-        CI <- inla.hpdmarginal(level, marg)
+        CI <- INLA::inla.hpdmarginal(level, marg)
 
         # apply the smoothing
         return(CI)
