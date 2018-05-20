@@ -22,9 +22,11 @@ binom.Bias.FB <- function(x, n, verbose=FALSE,  mc.cores=1){
   #   prior <- tau.prior
   # }
 
-  formula <- x ~ 1 + INLA::f(z, model="iid", hyper = list(prec = prior))
+    f<- INLA::f
+    
 
-  result <- INLA::inla(formula,
+
+  result <- INLA::inla(x ~ 1 + f(z, model="iid", hyper = list(prec = prior)),
                        data = dat,
                        family = "binomial",
                        control.fixed = list(mean.intercept = 0, prec.intercept = 1/1000),

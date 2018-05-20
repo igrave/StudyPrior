@@ -52,7 +52,7 @@ normal.PP.FB.INLA <- function(x, sd, verbose=FALSE ){
 
 
 
-  g <- function(p,X) ifelse(0<=p&p<=1, f(p),0)
+  # g <- function(p,X) ifelse(0<=p&p<=1, f(p),0)
 
   return(ifb)
 

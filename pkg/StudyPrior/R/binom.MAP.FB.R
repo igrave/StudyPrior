@@ -23,9 +23,9 @@ binom.MAP.FB <- function(x, n, tau.prior, verbose=FALSE){
     prior <- tau.prior
   }
 
-  formula <- x ~ 1 + INLA::f(z, model="iid", hyper = list(theta = prior))
+  formula <- 
 
-  result <- INLA::inla(formula,
+  result <- INLA::inla(x ~ 1 + f(z, model="iid", hyper = list(theta = prior)),
                        data = dat,
                        family = "binomial",
                        control.fixed = list(mean.intercept = 0, prec.intercept = 1/sqrt(pi^2 /3)),

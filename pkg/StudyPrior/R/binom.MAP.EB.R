@@ -48,12 +48,10 @@ binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
       # prior <-  list(prior= "flat", param=numeric(0))
 
 
-      formula <- x ~ 1 + INLA::f(z, model="iid", hyper = list(theta = prior))
+   
       ##########################################
 
-
-      
-      result <- INLA::inla(formula,
+      result <- INLA::inla(x ~ 1 + f(z, model="iid", hyper = list(theta = prior)),
                            data = dat,
                            family = "binomial",
                            control.fixed = list(mean.intercept = 0, prec.intercept = 1/1000),
@@ -73,14 +71,14 @@ binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
       
       VXN <- mode_tau^2
       
-      formulaEB = x ~ 1 + INLA::f(z, model="iid",
-                            hyper = list(theta = list(fixed=TRUE,
-                                                      initial=log(1/VXN)#1/mode_tau$maximum
-                            )))
+    
 
       dat <- data.frame(x=c(x[1:n.hist],NA), n=c(n[1:n.hist],NA), z=1:(n.hist+1))
 
-      resultEB = INLA::inla(formulaEB,
+      resultEB = INLA::inla(x ~ 1 + f(z, model="iid",
+                                            hyper = list(theta = list(fixed=TRUE,
+                                                                      initial=log(1/VXN)#1/mode_tau$maximum
+                                            ))),
                             data = dat,
                             family = "binomial",
                             control.fixed = list(mean.intercept = 0, prec.intercept = 1/1000),
