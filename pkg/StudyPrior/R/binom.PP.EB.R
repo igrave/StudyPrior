@@ -9,12 +9,13 @@
 #' @param p.prior.a shape1 parameter of initial beta prior for successes
 #' @param p.prior.b shape2 parameter of initial beta prior for successes 
 #' @param mix if TRUE return a mixture.prior object otherwise the function
+#' @param A limit on the prior sample size of the prior (FALSE or a numerical value)
 #'
 #' @return Either a list of mixture.prior objects which can be evaluated with eval.mixture.prior or a density function of the probability parmater p given X.
 #' @export
 #'
 #'
-binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.prior.b=1, mix=FALSE){
+binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.prior.b=1, max.dn=FALSE, mix=FALSE){
   #if X isn't specified we calculate it for all, set flag too
   if(missing(X)) {
     X <- 0:N
@@ -48,10 +49,12 @@ binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.pr
 
     d <- opd$par
 
-
+    if(max.dn & max.dn < sum(d*n)) d <- max.dn/sum(d*n) * d
 
     return(d)
   })
+ 
+ 
  
  if(mix){ #return mixture object
    return(
