@@ -5,6 +5,7 @@
 
 library(parallel)
 library(StudyPrior)
+library(INLA)
 inla.setOption(num.threads=2)
 
 
@@ -111,19 +112,31 @@ calc.oc <- function(I){
 }
 
 
-mclapply(1:1000, gen.models, mc.cores=20)
+mclapply(1:200, gen.models, mc.cores=20, mc.preschedule = FALSE)
 # mclapply(1:1000, calc.oc, mc.cores=30)
   
 
-TF2 <- rep(FALSE,1000)
-for(I in 1:1000) TF2[I] <-  !file.exists(paste0('models_',formatC(I, width=4, flag="0"),'.rda'))
+TF2 <- rep(FALSE,200)
+for(I in 1:200) TF2[I] <-  !file.exists(paste0('models_',formatC(I, width=4, flag="0"),'.rda'))
 recalc2 <- which(TF2)
+recalc2
 mclapply(recalc2, gen.models, mc.cores=20)
 #   
 
 
-TF3 <- rep(FALSE,1000)
-for(I in 1:1000) TF3[I] <-  !file.exists(paste0('oc_',formatC(I, width=4, flag="0"),'.rda'))
+TF3 <- rep(FALSE,200)
+for(I in 1:200) TF3[I] <-  !file.exists(paste0('oc_',formatC(I, width=4, flag="0"),'.rda'))
 recalc3 <- which(TF3)
-mclapply(recalc3, calc.oc, mc.cores=39, mc.preschedule = FALSE)
+mclapply(recalc3, calc.oc, mc.cores=30, mc.preschedule = FALSE)
 
+
+load(paste0('oc_0001.rda'))
+pow.all <- pow
+t1e.all <- t1e
+for(I in 2:200) {
+  load(paste0('oc_',formatC(I, width=4, flag="0"),'.rda'))
+  for(i in 1:9){
+    pow.all[[i]] <- pow[[i]]+pow.all[[i]]
+    t1e.all[[i]] <- t1e[[i]]+t1e.all[[i]]
+  }
+}
