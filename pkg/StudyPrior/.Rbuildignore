@@ -1,3 +1,5 @@
 ^Test$
 ^Examples$
 NAMESPACE.old
+^.*\.Rproj$
+^\.Rproj\.user$

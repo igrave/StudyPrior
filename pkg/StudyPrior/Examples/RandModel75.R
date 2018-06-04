@@ -33,17 +33,17 @@ gen.models <- function(I){
   binom.PP.EB(sum(xh), sum(nh), N=NN, mix=TRUE) -> c
   
   
-  lapply(a, function(A) create.mixture.prior("beta",
-                                             pars = rbind(attr(A,"pars"),c(1,1)),
-                                             weights = c(0.5*attr(A,"weights"),0.5))) -> d
+  # lapply(a, function(A) create.mixture.prior("beta",
+                                             # pars = rbind(attr(A,"pars"),c(1,1)),
+                                             # weights = c(0.5*attr(A,"weights"),0.5))) -> d
   
-  binom.PP.EB(xh, nh, N=NN, mix=TRUE, max.dn = 200-75) -> e
+  # binom.PP.EB(xh, nh, N=NN, mix=TRUE, max.dn = 200-75) -> e
   
-  binom.PP.EB(xh, nh, N=NN, mix=TRUE, max.dn = 50) -> f
+  # binom.PP.EB(xh, nh, N=NN, mix=TRUE, max.dn = 50) -> f
   
-  # binom.PP.FB.COR(xh, nh, d.prior.cor = 0, mix=TRUE) -> d
-  # binom.PP.FB.COR(xh, nh, d.prior.cor = .5, mix=TRUE) -> e
-  # binom.PP.FB.COR(xh, nh, d.prior.cor = 1, mix=TRUE) -> f
+  binom.PP.FB.COR(xh, nh, d.prior.cor = 0, mix=TRUE) -> d
+  binom.PP.FB.COR(xh, nh, d.prior.cor = .5, mix=TRUE) -> e
+  binom.PP.FB.COR(xh, nh, d.prior.cor = 1, mix=TRUE) -> f
   
   binom.MAP.FB(xh, nh) -> map.1
   conj.approx(distr = map.1,type = 'beta', max.degree = 10) -> g
@@ -111,7 +111,7 @@ calc.oc <- function(I){
 }
 
 
-mclapply(1:1000, gen.models, mc.cores=20)
+mclapply(201:1000, gen.models, mc.cores=20)
 # mclapply(1:1000, calc.oc, mc.cores=30)
   
 
@@ -127,3 +127,27 @@ for(I in 1:1000) TF3[I] <-  !file.exists(paste0('oc_',formatC(I, width=4, flag="
 recalc3 <- which(TF3)
 mclapply(recalc3, calc.oc, mc.cores=39, mc.preschedule = FALSE)
 
+
+ess.all <- mclapply(1:1000, function(I){
+  try( {load(file=paste0('models_',formatC(I, width=4, flag="0"),'.rda'))
+    ess.x <- lapply(list.posterior, function(p) sapply(p, ess.mixture.prior))
+    p <- seq(0,1,len=200)
+    
+  lapply(ess.x, function(ESS){
+      sapply(p, function(P) sum(dbinom(prob=P, x=0:NN, size=NN)*ESS))
+  })
+    
+  })})
+
+invalid <- c(413,922,976)
+
+ave.mat <- matrix(0, nrow=200,ncol=9)
+for(i in ess.all[-invalid]){
+  ave.mat <- ave.mat + matrix(unlist(i),nrow=200)/997
+}
+
+ess.list <- lapply(1:9, function(i) ave.mat[,i])
+
+  save(ess.list, file='ess-75.rda')
+  save(ess.list, ave.mat,ess.all, file='ess-75-all.rda')
+  
