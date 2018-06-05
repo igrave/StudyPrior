@@ -24,7 +24,9 @@ library(StudyPrior)
 if(require(INLA, quietly=TRUE)) INLA.available <-TRUE else{
   INLA.available <- FALSE
   print('INLA package not available. Examples using INLA will not be evaluated')
-} 
+}
+knitr::opts_knit$set(global.par=TRUE)
+par(las=1)
 
 @
 
@@ -52,7 +54,7 @@ We can plot priors. The EB prior requires the number of successes in the new tri
 <<plot>>=
 plot(pp.fullbayes.11, col="red",
      xlim=c(0,1), ylim=c(0,6), ylab="Density",
-     xlab=expression(paste("Success Probability",~theta)))
+     xlab=expression(paste("Success Probability",~theta)), las=1)
 curve(pp.fullbayes.55, add=TRUE, col="blue")
 curve(pp.fix.08, add=TRUE, col="green")
 curve(pp.eb(x,30), add=TRUE, col="orange")
@@ -72,7 +74,7 @@ MSE <- sapply(list(pp.fullbayes.11, pp.fullbayes.55, pp.fix.08, pp.eb),
 p <- seq(0.3,0.8,len=11)
 plot(p,MSE[,1],  col="red" , pch=16, type='l',
      ylab="MSE", xlab=expression(paste("Success Probability ",theta)),
-     ylim=c(0.005,0.015))
+     ylim=c(0.005,0.015), las=1)
 lines(p,MSE[,2],  col="blue", pch=16)
 lines(p,MSE[,3],  col="green", pch=16)
 lines(p,MSE[,4],  col="orange", pch=16)
@@ -99,7 +101,7 @@ POWER <- sapply(SM, function(SIGMAT) calc.power(sig.mat=SIGMAT,
       n.binom.control = n.new, n.binom.treatment = n.new))
 
 plot(p,POWER[,1],  col="red", type='l', ylab="Power",
-     xlab=expression(paste("Success Probability ",theta)))
+     xlab=expression(paste("Success Probability ",theta)), las=1)
 lines(p,POWER[,2],  col="blue")
 lines(p,POWER[,3],  col="green")
 lines(p,POWER[,4],  col="orange")
@@ -119,7 +121,7 @@ T1E <- sapply(SM, function(SIGMAT) calc.power(sig.mat=SIGMAT,
 
 plot(p,T1E[,1],  col="red", type='l', ylab="Type I Error",
      xlab=expression(paste("Success Probability ",theta)),
-     ylim=c(0,0.15))
+     ylim=c(0,0.15), las=1)
 lines(p,T1E[,2],  col="blue")
 lines(p,T1E[,3],  col="green")
 lines(p,T1E[,4],  col="orange")
@@ -188,7 +190,7 @@ We can approximate the priors with mixtures of densities. This makes calculation
 MAP.approx <- conj.approx(MAP, type="beta", max.degree = 3)
 
 curve(MAP, n=200, lty=1, lwd=2, ylab="Density", xlab=expression(theta))
-plot(MAP.approx,  col="cyan", lwd=2, lty=2, lines.only=TRUE)
+plot(MAP.approx,  col="cyan", lwd=2, lty=2, lines.only=TRUE, las=1)
 
 legend("topleft", lty=1:2, col=c("black","cyan"), lwd=2, legend=c("MAP","Approximation"))
 @
@@ -218,7 +220,7 @@ system.time(BIAS.APPROX <- calc.bias(MAP.approx, prob.range = c(0.3,0.8),length=
 <<biasplot>>=
 plot(p,BIAS.PP[,1],  col="red", type='l', ylab="Bias",
      xlab=expression(paste("Success Probability ",theta)),
-     ylim=c(-0.15,0.15), lwd=2)
+     ylim=c(-0.15,0.15), lwd=2, las=1)
 lines(p,BIAS.PP[,2],  col="blue", lwd=2)
 lines(p,BIAS.PP[,3],  col="green", lwd=2)
 lines(p,BIAS.PP[,4],  col="orange", lwd=2)
@@ -243,7 +245,7 @@ p2 <- seq(0.3,.8, len=501)
 
 plot(p2,COVER[300:800,1],  col="red", type='l', ylab="Coverage",
      xlab=expression(paste("Success Probability ",theta)),
-     ylim=c(0,1), lwd=2)
+     ylim=c(0,1), lwd=2, las=1)
 
 lines(p2,COVER[300:800,2],  col="blue", lwd=2)
 lines(p2,COVER[300:800,3],  col="green", lwd=2)
