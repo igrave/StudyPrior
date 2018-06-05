@@ -5,7 +5,6 @@
 #' @param verbose Print messages
 #'
 #' @return A density function
-#' @export
 #'
 
 normal.PP.FB.INLA <- function(x, sd, verbose=FALSE ){

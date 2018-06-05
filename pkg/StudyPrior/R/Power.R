@@ -12,7 +12,6 @@
 #' @param sig.mat Precalculated significance matrix (See sig.matrix)
 #'
 #' @return Vector or power values
-#' @export
 #'
 
 calc.power <- function(prior, prob.range=c(.5,.9), length=20, n.binom.control=30,

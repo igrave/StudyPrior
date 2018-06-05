@@ -5,7 +5,6 @@
 #' @param ... extra parameters to plot
 #'
 #' @return Nothing
-#' @export
 #'
 
 bool.mat.plot <- function(mat, col.pair=c('darkred','lightblue'),...){

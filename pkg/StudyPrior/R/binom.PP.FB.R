@@ -10,7 +10,6 @@
 #' @param dprior Density function for prior on weights
 #'
 #' @return A function of the probability parmater p
-#' @export
 #'
 #'
 binom.PP.FB <- function(x, n, verbose=FALSE, length=30, dprior, mc.cores=1,  p.prior.a=1, p.prior.b=1){

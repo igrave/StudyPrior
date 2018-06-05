@@ -8,7 +8,6 @@
 #' @param posterior Posterior density 
 #'
 #' @return A vector of error values
-#' @export
 #'
 calc.MSE <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, mc.cores=1, posterior){
 

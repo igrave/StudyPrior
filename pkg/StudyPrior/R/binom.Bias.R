@@ -6,7 +6,6 @@
 #' @param mc.cores number of cores for parallel
 #'
 #' @return A function of the probability parmater p
-#' @export
 #'
 #'
 binom.Bias.FB <- function(x, n, verbose=FALSE,  mc.cores=1){

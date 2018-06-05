@@ -10,7 +10,6 @@
 #' 
 #' 
 #' @return A vector of coverage values
-#' @export
 #'
 calc.coverage <- function(prior, level, n.control, smooth, posterior=NULL, ...){
 

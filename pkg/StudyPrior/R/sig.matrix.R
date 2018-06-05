@@ -13,7 +13,6 @@
 #' @param approx Use \code{approxfun} to approximate the posterior if a mixture.prior is supplied. 
 #'
 #' @return A matrix of TRUE/FALSE values of dimensions (n.control+1, n.treatment+1) representing significant tests
-#' @export
 #'
 #' Calculations are done using fast functions when \code{treat.beta.prior.par == c(1,1)} and the posterior is supplied as an \code{mixture.prior} object.
 

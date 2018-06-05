@@ -11,7 +11,6 @@
 #' @param type Either "mean" or "mode" of the posterior to use as the estimate
 #'
 #' @return A vector of bias values
-#' @export
 #'
 calc.bias <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, posterior, mc.cores=1, type="mean"){
 

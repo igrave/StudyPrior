@@ -12,9 +12,7 @@
 #' @param d.prior.cor Correlation parameter for transformed multivariate normal prior on weights
 #'
 #' @return A density function
-#' @export
 #'
-#' @importFrom mvtnorm rmvnorm
 #'
 binom.PP.FB.MC.COR <- function(x, n, verbose=FALSE, length=200, d.prior.cor=0, p.prior.a=1, p.prior.b=1, mc.cores=1, samples=10000, focus ){
   n.hist <- length(x)

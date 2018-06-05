@@ -18,7 +18,6 @@
 #' mean.mixture.prior(fb) #calculate the mean
 #' }
 #'
-#' @importFrom mvtnorm rmvnorm
 #'
 binom.PP.FB.COR <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=0, p.prior.a=1, p.prior.b=1, mc.cores=1, mix=FALSE){
   n.hist <- length(x)

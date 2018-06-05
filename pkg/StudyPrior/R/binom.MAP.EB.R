@@ -9,7 +9,6 @@
 #' @param upper Upper limit of variance parameter
 #'
 #' @return A function of the probability parmater p
-#' @export
 #'
 binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
   n.hist <- length(x)

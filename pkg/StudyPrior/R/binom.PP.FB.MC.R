@@ -11,7 +11,6 @@
 #' @param focus List of triples specifying regions to focus on, eg peaks. Specified as list(c(lower, upper, length))
 #'
 #' @return A density function
-#' @export
 #'
 
 binom.PP.FB.MC <- function(x, n, verbose=FALSE, length=30, d.prior.a=1, d.prior.b=1, mc.cores=1, samples=10000, focus){

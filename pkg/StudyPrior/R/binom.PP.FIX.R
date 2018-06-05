@@ -8,7 +8,6 @@
 #' @param verbose Print messages
 #'
 #' @return Probability density function for paramater p
-#' @export
 #'
 #'
 binom.PP.FIX <- function(x, n, d,  p.prior.a=1, p.prior.b=1, verbose){

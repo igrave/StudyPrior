@@ -7,7 +7,6 @@
 #' @param SD new study standard deviation
 #'
 #' @return A density function of the mean parameter
-#' @export
 #'
 normal.PP.EB <- function(x, sd, X, SD){
 

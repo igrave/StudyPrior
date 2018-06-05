@@ -31,6 +31,8 @@ sig.matrix(n.control, n.treatment, level = 0.975, prior, posterior,
 }
 \value{
 A matrix of TRUE/FALSE values of dimensions (n.control+1, n.treatment+1) representing significant tests
+
+Calculations are done using fast functions when \code{treat.beta.prior.par == c(1,1)} and the posterior is supplied as an \code{mixture.prior} object.
 }
 \description{
 Calculate a matrix of significance test results for all possible values

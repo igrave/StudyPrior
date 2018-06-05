@@ -10,7 +10,6 @@
 #' @param mix if TRUE return a mixture.prior object otherwise the function
 #'
 #' @return Either a list of mixture.prior objects which can be evaluated with eval.mixture.prior or a density function of the probability parmater p given X.
-#' @export
 #'
 #'
 binom.PP.EB.Sep <- function(x, n, X, N, verbose=FALSE, p.prior.a=1, p.prior.b=1, mix=FALSE){

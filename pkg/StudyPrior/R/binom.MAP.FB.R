@@ -6,7 +6,6 @@
 #' @param verbose Print messages
 #'
 #' @return A function of the probability parmater p
-#' @export
 #'
 #'
 binom.MAP.FB <- function(x, n, tau.prior, verbose=FALSE){

@@ -41,4 +41,5 @@ fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes 
 mean.mixture.prior(fb) #calculate the mean
 }
 
+
 }

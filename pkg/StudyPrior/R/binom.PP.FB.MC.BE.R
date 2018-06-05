@@ -13,7 +13,7 @@
 #' @param p.prior.b shape2 parameter for beta prior on probability
 #'
 #' @return A density function
-#' @export
+
 binom.PP.FB.MC.BE <- function(x, n, verbose=FALSE, length=30,
                               d.prior.a=1, d.prior.b=1, p.prior.a=1, p.prior.b=1,
                               mc.cores=1, samples=10000, focus ){

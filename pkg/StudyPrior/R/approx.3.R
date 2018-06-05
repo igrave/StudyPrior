@@ -13,7 +13,6 @@
 #' @param return.value Convergence threshold
 #'
 #' @return Returns a mixture.prior object
-#' @export
 #'
 
 conj.approx <- function(distr,

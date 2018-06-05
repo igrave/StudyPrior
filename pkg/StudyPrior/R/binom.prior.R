@@ -9,7 +9,6 @@
 #' @param verbose Print messages
 #'
 #' @return A density function
-#' @export
 #'
 #' @examples \donttest{
 #' xh <- c(30,40,50)
