@@ -15,3 +15,14 @@ Variance of prior
 \description{
 Calculate the variance of mixture model
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) #fit a full Bayes power prior with 500 samples
+var.mixture.prior(fb2)
+var.mixture.prior(fb)
+}
+
+}

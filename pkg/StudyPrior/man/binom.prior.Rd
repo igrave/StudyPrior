@@ -24,3 +24,16 @@ A density function
 \description{
 Prior distribution for binomial data
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+eb <- binom.prior("PP.EB", xh, nh, X=34,N=75)
+fb <- binom.prior("PP.FB", xh, nh)
+
+p <- seq(0,1,len=100)
+plot(p,fb(p), ty='l', ylim=c(0,15))
+lines(p, eb(p,X=0), col=2)
+}
+
+}

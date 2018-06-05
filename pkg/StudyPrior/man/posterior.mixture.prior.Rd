@@ -21,3 +21,14 @@ A \code{mixture.prior} object
 \description{
 Calculate posterior mixture model
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+post.fb <- posterior.mixture.prior(xs=51, ns=100, mixture.prior=fb)
+plot(fb, xlab="p",ylab="Density", ylim=c(0,12))
+plot(post.fb, lines.only=TRUE, col=3)
+}
+
+}

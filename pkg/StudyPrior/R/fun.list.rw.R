@@ -3,7 +3,7 @@
 #' @param x Object 
 #'
 #' @return TRUE if \code{x} is a \code{mixture.prior}, else FALSE
-#' @export
+#'  
 #'
 is.mixture.prior <- function(x) {
   inherits(x, "mixture.prior")
@@ -17,8 +17,12 @@ is.mixture.prior <- function(x) {
 #' @param weights Mixture weights
 #'
 #' @return A \code{mixture.prior} object
-#' @export
-#'
+#'  
+#'@examples \donttest{
+#'pars <- matrix(c(2.4,1,3.7,1),ncol=2)
+#'mymix <- create.mixture.prior(type="beta", pars = pars, weights=c(0.5,0.5)) #A mixture of 0.5*B(2.4,3.7) + 0.5*B(1,1) 
+#' }
+
 create.mixture.prior <- function(type, pars, weights=rep(1/nrow(pars),nrow(pars))){
   
 
@@ -51,7 +55,7 @@ create.mixture.prior <- function(type, pars, weights=rep(1/nrow(pars),nrow(pars)
 #' @param weights New weights
 #'
 #' @return A \code{mixture.prior} object with updated weights and parameters
-#' @export
+#'  
 #' @method update mixture.prior
 update.mixture.prior <- function(object, ..., pars, weights ){
   
@@ -80,29 +84,36 @@ update.mixture.prior <- function(object, ..., pars, weights ){
 #' @param subset Vector of values specifying which mixture components should be included, eg c(1,2)
 #'
 #' @return Densities at of prior at x 
-#' @export 
-#'
+#'   
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+#' eval.mixture.prior(seq(0,1,0.1), mixture.prior = fb) #Evalute the prior
+#' }
+
+# eval.mixture.prior <- function(x, mixture.prior, subset){
+#   
+#   if(missing(subset)){
+#     sapply(x, function(X){
+#       attr(mixture.prior,"weights") %*%
+#         mixture.prior$fun(X,
+#                           attr(mixture.prior,"pars")[,1],
+#                           attr(mixture.prior,"pars")[,2])
+#     })
+#   } else {
+#     sapply(x, function(X){
+#       attr(mixture.prior,"weights")[subset] %*%
+#         mixture.prior$fun(X,
+#                           attr(mixture.prior,"pars")[subset,1],
+#                           attr(mixture.prior,"pars")[subset,2])
+#     })
+#   }
+#   
+# }
+
+
 eval.mixture.prior <- function(x, mixture.prior, subset){
-  if(missing(subset)){
-    sapply(x, function(X){
-      attr(mixture.prior,"weights") %*%
-        mixture.prior$fun(X,
-                          attr(mixture.prior,"pars")[,1],
-                          attr(mixture.prior,"pars")[,2])
-    })
-  } else {
-    sapply(x, function(X){
-      attr(mixture.prior,"weights")[subset] %*%
-        mixture.prior$fun(X,
-                          attr(mixture.prior,"pars")[subset,1],
-                          attr(mixture.prior,"pars")[subset,2])
-    })
-  }
-  
-}
-
-
-eval.mixture.prior2 <- function(x, mixture.prior, subset){
   if(missing(subset)){
     
     X <- rep(x, each=attr(mixture.prior,"degree"))
@@ -140,8 +151,15 @@ eval.mixture.prior2 <- function(x, mixture.prior, subset){
 #' @param lines.only Draw lines only (to be used over an existing plot)
 #' @param ... Additional arguments to \code{\link{lines}}
 #'
-#' @export
-#'
+#'  
+#'@examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+#' fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) #fit a full Bayes power prior with 500 samples
+#' plot.mixture.prior(fb2, xlab="p",ylab="Density")
+#' plot.mixture.prior(fb, lines.only=TRUE, col=2)
+#' }
 
 
 plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=FALSE){
@@ -173,8 +191,15 @@ plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=
 #' @param mixture.prior Mixture prior object
 #'
 #' @return Sample size
-#' @export
-#'
+#'  
+#'@examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE)
+#' fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
+#' ess.mixture.prior(fb2)
+#' ess.mixture.prior(fb)
+#' }
 ess.mixture.prior <- function(mixture.prior){
   if(inherits(mixture.prior,"beta")) sum(attr(mixture.prior,"weights")%*% attr(mixture.prior,"pars")) else NA
 }
@@ -186,8 +211,13 @@ ess.mixture.prior <- function(mixture.prior){
 #' @param ... Ignored
 #'
 #' @return Mean of prior
-#' @export
-#'
+#'  
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+#' mean.mixture.prior(fb) #calculate the mean
+#' }
 
 mean.mixture.prior <- function(x, ...){
   if(inherits(x,"beta")) {
@@ -202,7 +232,15 @@ mean.mixture.prior <- function(x, ...){
 #' @param mixture.prior Mixture prior object
 #'
 #' @return Variance of prior
-#' @export
+#'  
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+#' fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) #fit a full Bayes power prior with 500 samples
+#' var.mixture.prior(fb2)
+#' var.mixture.prior(fb)
+#' }
 #'
 var.mixture.prior <- function(mixture.prior){
 
@@ -236,7 +274,15 @@ var.mixture.prior <- function(mixture.prior){
 #' @param sd Standard deviation for normal model
 #'
 #' @return A \code{mixture.prior} object
-#' @export
+#'   
+#'@examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+#' post.fb <- posterior.mixture.prior(xs=51, ns=100, mixture.prior=fb)
+#' plot(fb, xlab="p",ylab="Density", ylim=c(0,12))
+#' plot(post.fb, lines.only=TRUE, col=3)
+#' }
 #'
 posterior.mixture.prior <- function(xs, ns, sd, mixture.prior){
   pars <- attr(mixture.prior,'pars')
@@ -286,7 +332,7 @@ posterior.mixture.prior <- function(xs, ns, sd, mixture.prior){
 #' @param x Mixture prior object
 #' @param ... Ignored
 #'
-#' @export
+#'  
 #'
 print.mixture.prior <- function(x, ...){
   
@@ -310,7 +356,7 @@ print.mixture.prior <- function(x, ...){
 #' @param mixture.prior Mixture prior object
 #'
 #' @return A vector of n samples from \code{mixture.prior}
-#' @export
+#'  
 #'
 sample.mixture.prior <- function(n, mixture.prior){
   w <- attr(mixture.prior, "weights")
@@ -338,8 +384,8 @@ sample.mixture.prior <- function(n, mixture.prior){
 #' @param q Quantile
 #' @param mixture.prior Mixture prior object
 #'
-#' @return Vector of probabilities
-#' @export
+#' @return Probability for the given quantile.
+#'  
 #'
 p.mixture.prior <- function(q, mixture.prior){
   w <- attr(mixture.prior,"weights")
@@ -360,8 +406,8 @@ p.mixture.prior <- function(q, mixture.prior){
 #' @param p Probability
 #' @param mixture.prior Mixture prior object
 #'
-#' @return Vector of quantiles
-#' @export
+#' @return Quantile for the given probability
+#'  
 #'
 q.mixture.prior <- function(p, mixture.prior){
   if(any(p > 1 | p < 0)) stop("p must be between 0 and 1")

@@ -15,7 +15,7 @@ binom.PP.FB.COR(x, n, verbose = FALSE, mixture.size = 1000,
 
 \item{verbose}{Print messages}
 
-\item{mixture.size}{Number of components in the mixture. If d.prior.cor=0, will be rounded to nearest value a^length(x) to make the grid evenly spaced.}
+\item{mixture.size}{Number of components in the mixture.}
 
 \item{d.prior.cor}{Correlation parameter for transformed multivariate normal prior on weights}
 
@@ -32,4 +32,13 @@ A density function
 }
 \description{
 Full Bayes Power Prior with Correlated Weight Parameters using Rao-Blackwell
+}
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
+mean.mixture.prior(fb) #calculate the mean
+}
+
 }

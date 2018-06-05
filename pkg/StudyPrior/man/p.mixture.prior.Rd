@@ -12,7 +12,7 @@ p.mixture.prior(q, mixture.prior)
 \item{mixture.prior}{Mixture prior object}
 }
 \value{
-Vector of probabilities
+Probability for the given quantile.
 }
 \description{
 Probabilty function
