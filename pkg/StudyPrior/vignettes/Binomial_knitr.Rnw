@@ -178,6 +178,8 @@ PP.FB.COR <- binom.PP.FB.COR(x=x.multi, n=n.multi, d.prior.cor = 0.5)
 The empirical Bayes approach is also possible.
 <<PPEB>>=
 PP.EB <- binom.PP.EB(x=x.multi, n=n.multi, X=0:n.new, N=n.new)
+PP.EB.50 <- binom.PP.EB(x=x.multi, n=n.multi, X=0:n.new, N=n.new, max.dn = 50)
+
 @
 
 
