@@ -9,22 +9,37 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Practical 1
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r data}
+x.hist <- c(6,8,17,28,26,8,22,8,6,16,53)
+n.hist <- c(33,45,74,103,140,49,83,59,22,109,213)
+p.hist <- x.hist/n.hist
 
-```{r cars}
-summary(cars)
+x.c <- 12
+n.c <- 80
+
+x.t <- 8
+n.t <- 80
 ```
 
-## Including Plots
+Make the priors
 
-You can also embed plots, for example:
+```{r}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+library(StudyPrior)
+library(INLA)
+
+pool <- binom.PP.FIX(x=x.hist, n=n.hist, d=1, mix = TRUE)
+
+pp08 <- binom.PP.FIX(x=x.hist, n=n.hist, d=0.8, mix = TRUE)
+
+pp01 <- binom.PP.FIX(x=x.hist, n=n.hist, d=0.1, mix = TRUE)
+
+
+plot(pool, at=seq(0,1,len=500), xlab="p")
+plot(pp08, lines.only=TRUE, col=2, at=seq(0,1,len=500))
+plot(pp01, lines.only=TRUE, col=3, at=seq(0,1,len=500))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
