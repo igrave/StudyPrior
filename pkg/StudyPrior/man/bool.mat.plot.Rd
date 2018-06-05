@@ -14,7 +14,7 @@ bool.mat.plot(mat, col.pair = c("darkred", "lightblue"), ...)
 \item{...}{extra parameters to plot}
 }
 \value{
-Nothing
+A new plot is created. Nothing returned.
 }
 \description{
 Plot a boolean matrix in two colours

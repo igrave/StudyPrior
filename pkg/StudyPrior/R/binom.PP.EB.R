@@ -13,7 +13,11 @@
 #'
 #' @return Either a list of mixture.prior objects which can be evaluated with eval.mixture.prior or a density function of the probability parmater p given X.
 #'
-#'
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' eb <- binom.PP.EB(xh, nh, X=34,N=75, mix=TRUE) # EB power prior for new data 34/75.
+#' }
 binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.prior.b=1, max.dn = FALSE, mix=FALSE){
   #if X isn't specified we calculate it for all, set flag too
   if(missing(X)) {

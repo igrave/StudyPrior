@@ -30,3 +30,11 @@ Either a list of mixture.prior objects which can be evaluated with eval.mixture.
 \description{
 Empirical Bayes Power Prior for Binomial Data with the power parameters esimated separately
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+eb.sep <- binom.PP.EB.Sep(xh, nh, X=34,N=75, mix=TRUE)
+}
+
+}

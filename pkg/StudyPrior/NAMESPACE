@@ -6,7 +6,7 @@ S3method(update,mixture.prior)
 export(VP)
 #export(binom.Beta.EB)
 #export(binom.Bias.FB)
-export(binom.MAP.EB)
+#export(binom.MAP.EB)
 export(binom.MAP.FB)
 
 export(binom.PP.EB)

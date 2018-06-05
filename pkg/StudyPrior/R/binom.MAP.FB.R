@@ -7,8 +7,17 @@
 #'
 #' @return A function of the probability parmater p
 #'
-#'
-binom.MAP.FB <- function(x, n, tau.prior, verbose=FALSE){
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' 
+#' # Fit a MAP prior
+#' map <- binom.MAP.FB(xh,nh, X=34,N=75, tau.prior = list(prior= "logtnormal", param=c(0,0.5)))
+#' 
+#' # Approximate with beta densities and add a 20% robust component
+#' mix.map <- conj.approx(map, "beta", robust=0.2) 
+#'  }
+binom.MAP.FB <- function(x, n, tau.prior,verbose=FALSE){
   n.hist <- length(x)
   dat <- data.frame(x=c(x,NA), n=c(n,NA), z=1:(n.hist+1))
 

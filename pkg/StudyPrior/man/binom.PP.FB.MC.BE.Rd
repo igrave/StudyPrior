@@ -37,3 +37,16 @@ A density function
 \description{
 Full Bayes Power Prior with Beta Prior on Weights
 }
+\examples{
+\donttest{
+x <- 21
+n <- 37
+
+#Full Bayes with delta~Be(1,1)
+pp.fullbayes.11 <- binom.PP.FB.MC.BE(x = x, n = n, d.prior.a = 1, d.prior.b = 1)
+
+#Full Bayes with delta~Be(.5,.5)
+pp.fullbayes.55 <- binom.PP.FB.MC.BE(x = x, n = n, d.prior.a = .5, d.prior.b = .5)
+
+}
+}

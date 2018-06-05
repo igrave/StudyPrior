@@ -22,6 +22,8 @@ Create mixture model
 \examples{
 \donttest{
 pars <- matrix(c(2.4,1,3.7,1),ncol=2)
-mymix <- create.mixture.prior(type="beta", pars = pars, weights=c(0.5,0.5)) #A mixture of 0.5*B(2.4,3.7) + 0.5*B(1,1) 
+
+#A mixture of 0.5 Be(2.4,3.7) + 0.5 Be(1,1) 
+mymix <- create.mixture.prior(type="beta", pars = pars, weights=c(0.5,0.5))
 }
 }

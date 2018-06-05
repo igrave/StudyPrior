@@ -25,8 +25,12 @@ Plot mixture model
 \donttest{
 xh <- c(30,40,50)
 nh <- c(90,95,110)
-fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) #fit a full Bayes power prior with 500 samples
-fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) #fit a full Bayes power prior with 500 samples
+
+#fit a full Bayes power prior with 500 samples
+fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+
+#fit a full Bayes power prior with 500 samples and correlation 0.9
+fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
 plot.mixture.prior(fb2, xlab="p",ylab="Density")
 plot.mixture.prior(fb, lines.only=TRUE, col=2)
 }

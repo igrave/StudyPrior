@@ -13,6 +13,18 @@
 #' @param p.prior.b shape2 parameter for beta prior on probability
 #'
 #' @return A density function
+#' 
+#' @examples \donttest{
+#' x <- 21
+#' n <- 37
+#' 
+#' #Full Bayes with delta~Be(1,1)
+#' pp.fullbayes.11 <- binom.PP.FB.MC.BE(x = x, n = n, d.prior.a = 1, d.prior.b = 1)
+#' 
+#' #Full Bayes with delta~Be(.5,.5)
+#' pp.fullbayes.55 <- binom.PP.FB.MC.BE(x = x, n = n, d.prior.a = .5, d.prior.b = .5)
+#' 
+#' }
 
 binom.PP.FB.MC.BE <- function(x, n, verbose=FALSE, length=30,
                               d.prior.a=1, d.prior.b=1, p.prior.a=1, p.prior.b=1,

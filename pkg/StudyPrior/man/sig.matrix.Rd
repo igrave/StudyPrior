@@ -37,3 +37,13 @@ Calculations are done using fast functions when \code{treat.beta.prior.par == c(
 \description{
 Calculate a matrix of significance test results for all possible values
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
+mat <- sig.matrix(n.control=50, n.treatment=75, prior = fix)
+bool.mat.plot(mat)
+}
+
+}

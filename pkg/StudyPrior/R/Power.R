@@ -12,8 +12,21 @@
 #' @param sig.mat Precalculated significance matrix (See sig.matrix)
 #'
 #' @return Vector or power values
-#'
-
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
+#' mat <- sig.matrix(n.control=50, n.treatment=75, prior = fix)
+#' 
+#' # Calculate the power to detect difference of 0.15
+#' pow <- calc.power(sig.mat=mat, prob.range=c(.5,.85),
+#'   n.binom.control = 50, n.binom.treatment=75, treatment.difference=0.15)
+#' 
+#' # Calculate the type 1 error by setting treatment.difference = 0
+#' pow <- calc.power(sig.mat=mat, prob.range=c(.5,.85),
+#'   n.binom.control = 50, n.binom.treatment=75, treatment.difference=0)
+#' 
+#' }
 calc.power <- function(prior, prob.range=c(.5,.9), length=20, n.binom.control=30,
                        n.binom.treatment=n.binom.control, treatment.difference=0.1, level=0.95, sig.mat, LR=FALSE){
 # the probability to detect a given true difference
