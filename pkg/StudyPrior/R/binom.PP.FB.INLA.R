@@ -11,7 +11,6 @@
 #' #' @param focus
 #' #'
 #' #' @return
-#' #' @export
 #' #'
 #' #' @examples
 #' binom.PP.FB.INLA <- function(x, n, X,N,verbose=FALSE, length=30, d.prior.a=1, d.prior.b=1, mc.cores=1){

@@ -11,8 +11,14 @@
 #' @param type Either "mean" or "mode" of the posterior to use as the estimate
 #'
 #' @return A vector of bias values
-#' @export
-#'
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
+#' post <- posterior.mixture.prior(34,75, mixture.prior = fix)  
+#' calc.bias(posterior = fix, prob.range=c(0,1), n.binom=100)
+#' }
+#' 
 calc.bias <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, posterior, mc.cores=1, type="mean"){
 
 

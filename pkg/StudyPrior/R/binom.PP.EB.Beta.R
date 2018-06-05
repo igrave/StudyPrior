@@ -7,7 +7,6 @@
 #' @param verbose Print messages
 #'
 #' @return A function of the probability parmater p
-#' @export
 #'
 #'
 binom.PP.EB.Beta <- function(x, n, X, N, verbose=FALSE){

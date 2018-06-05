@@ -30,3 +30,15 @@ A function of the probability parmater p
 \description{
 Full Bayes Power Prior for Binomial Data
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+
+#fit a full Bayes power prior with U shaped prior
+fb <- binom.PP.FB(x=xh, n=nh, p.prior.a=0.5,p.prior.b=0.5)
+
+}
+
+
+}

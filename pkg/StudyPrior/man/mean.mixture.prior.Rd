@@ -17,3 +17,13 @@ Mean of prior
 \description{
 Calculate the mean of mixture model
 }
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+
+ #fit a full Bayes power prior with 500 samples
+fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE)
+mean.mixture.prior(fb) #calculate the mean
+}
+}

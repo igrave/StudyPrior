@@ -7,9 +7,16 @@
 #' @param mc.cores Number of cores for parallel
 #' @param posterior Posterior density 
 #'
-#' @return A vector of error values
-#' @export
+#' @return A vector of MSE values
 #'
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
+#' post <- posterior.mixture.prior(34,75, mixture.prior = fix)  
+#' calc.MSE(posterior = fix, prob.range=c(0,1), n.binom=100)
+#' }
+#' 
 calc.MSE <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, mc.cores=1, posterior){
 
   P <- seq(prob.range[1],prob.range[2],len=length)

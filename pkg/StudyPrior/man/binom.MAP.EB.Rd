@@ -4,7 +4,7 @@
 \alias{binom.MAP.EB}
 \title{Empirical Bayes Meta-Analytic Prior for Binomial Data}
 \usage{
-binom.MAP.EB(x, n, X, N, verbose = FALSE, upper = 4, mc.cores)
+binom.MAP.EB(x, n, X, N, verbose = FALSE, upper = 4, mc.cores = 1)
 }
 \arguments{
 \item{x}{number of historical successes}
@@ -26,4 +26,12 @@ A function of the probability parmater p
 }
 \description{
 Empirical Bayes Meta-Analytic Prior for Binomial Data
+}
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+ map <- binom.MAP.EB(xh,nh, X=34,N=75)
+ }
+
 }

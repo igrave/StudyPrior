@@ -31,7 +31,19 @@ sig.matrix(n.control, n.treatment, level = 0.975, prior, posterior,
 }
 \value{
 A matrix of TRUE/FALSE values of dimensions (n.control+1, n.treatment+1) representing significant tests
+
+Calculations are done using fast functions when \code{treat.beta.prior.par == c(1,1)} and the posterior is supplied as an \code{mixture.prior} object.
 }
 \description{
 Calculate a matrix of significance test results for all possible values
+}
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
+mat <- sig.matrix(n.control=50, n.treatment=75, prior = fix)
+bool.mat.plot(mat)
+}
+
 }

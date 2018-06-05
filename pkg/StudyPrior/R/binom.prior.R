@@ -9,7 +9,17 @@
 #' @param verbose Print messages
 #'
 #' @return A density function
-#' @export
+#'
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#' eb <- binom.prior("PP.EB", xh, nh, X=34,N=75)
+#' fb <- binom.prior("PP.FB", xh, nh)
+#'
+#' p <- seq(0,1,len=100)
+#' plot(p,fb(p), ty='l', ylim=c(0,15))
+#' lines(p, eb(p,X=0), col=2)
+#' }
 #'
 
 binom.prior <- function(type = c("MAP.FB", "MAP.EB","PP.FB","PP.EB","PP.EB.Beta","Beta.EB","PP.EB.Sep", "PP.Fix","PP.Cor"),

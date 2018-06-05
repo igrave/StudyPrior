@@ -7,7 +7,6 @@
 #' @param N Number of patients 
 #'
 #' @return The posterior density function
-#' @export
 #'
 #'
 #'

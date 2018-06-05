@@ -4,8 +4,7 @@
 #' @param col.pair Vector of colours. First entry is used for FALSE and second for TRUE
 #' @param ... extra parameters to plot
 #'
-#' @return Nothing
-#' @export
+#' @return A new plot is created. Nothing returned.
 #'
 
 bool.mat.plot <- function(mat, col.pair=c('darkred','lightblue'),...){

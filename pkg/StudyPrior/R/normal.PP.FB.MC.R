@@ -11,7 +11,6 @@
 #' @param d.prior.b shape2 parameter for beta prior on weights
 #'
 #' @return Density function 
-#' @export
 #'
 normal.PP.FB.MC <- function(x, sd, verbose=FALSE, length=30, d.prior.a=1, d.prior.b=1, mc.cores=1, samples=10000, focus){
   n.hist <- length(x)

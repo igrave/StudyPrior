@@ -1,13 +1,12 @@
 Package: StudyPrior
 Type: Package
 Title: Construct Prior Distributions from Historical Information
-Version: 0.0.12
+Version: 0.0.14
 Authors@R: c(person("Isaac", "Gravestock", role = c("aut", "cre"),
                      email = "isaac.gravestock@uzh.ch",
                       comment = c(ORCID = "0000-0003-0283-2065")))
 Maintainer: Isaac Gravestock <isaac.gravestock@uzh.ch>
-Description: Implements useful prior distributions for incorporating data from
-    previous studies into a new study, such as meta-analytic priors and power priors.
+Description: Implements useful prior distributions for incorporating data from previous studies into a new study, such as meta-analytic priors (Schmidli et al.(2014) <doi:10.1111/biom.12242>) and power priors (Gravestock and Held (2018) <arXiv:1708.08239>.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

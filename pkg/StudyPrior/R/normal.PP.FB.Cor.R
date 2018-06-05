@@ -8,9 +8,7 @@
 #' @param sd vector of standard deviations of historical studies
 #'
 #' @return A density function
-#' @export
 #'
-#' @importFrom mvtnorm rmvnorm
 #'
 normal.PP.FB.COR <- function(x, sd,  verbose=FALSE, mixture.size=1000, d.prior.cor=0, mc.cores=1){
   n.hist <- length(x)

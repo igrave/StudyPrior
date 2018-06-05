@@ -2,7 +2,6 @@
 #'
 #' @param message Message to print
 #'
-#' @export
 #'
 VP <- function(message){
   # if(parent.frame()$verbose)

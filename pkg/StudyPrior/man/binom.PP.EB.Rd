@@ -5,7 +5,7 @@
 \title{Empirical Bayes Power Prior for Binomial Data}
 \usage{
 binom.PP.EB(x, n, X, N, verbose = FALSE, mc.cores = 1, p.prior.a = 1,
-  p.prior.b = 1, mix = FALSE)
+  p.prior.b = 1, max.dn = FALSE, mix = FALSE)
 }
 \arguments{
 \item{x}{number of historical successes}
@@ -24,6 +24,8 @@ binom.PP.EB(x, n, X, N, verbose = FALSE, mc.cores = 1, p.prior.a = 1,
 
 \item{p.prior.b}{shape2 parameter of initial beta prior for successes}
 
+\item{max.dn}{Set a limit on the sum of the weights*n}
+
 \item{mix}{if TRUE return a mixture.prior object otherwise the function}
 }
 \value{
@@ -31,4 +33,11 @@ Either a list of mixture.prior objects which can be evaluated with eval.mixture.
 }
 \description{
 Empirical Bayes Power Prior for Binomial Data
+}
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+eb <- binom.PP.EB(xh, nh, X=34,N=75, mix=TRUE) # EB power prior for new data 34/75.
+}
 }

@@ -9,9 +9,13 @@
 #' @param upper Upper limit of variance parameter
 #'
 #' @return A function of the probability parmater p
-#' @export
+#' @examples \donttest{
+#' xh <- c(30,40,50)
+#' nh <- c(90,95,110)
+#'  map <- binom.MAP.EB(xh,nh, X=34,N=75)
+#'  }
 #'
-binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores){
+binom.MAP.EB <- function(x, n, X, N, verbose=FALSE, upper = 4,  mc.cores=1){
   n.hist <- length(x)
   n.new <- 0
 

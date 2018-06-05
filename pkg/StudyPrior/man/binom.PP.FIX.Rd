@@ -4,7 +4,7 @@
 \alias{binom.PP.FIX}
 \title{Fixed Weight Power Prior for Binomial Data}
 \usage{
-binom.PP.FIX(x, n, d, p.prior.a = 1, p.prior.b = 1, verbose)
+binom.PP.FIX(x, n, d, p.prior.a = 1, p.prior.b = 1, mix = FALSE)
 }
 \arguments{
 \item{x}{historical events}
@@ -17,11 +17,19 @@ binom.PP.FIX(x, n, d, p.prior.a = 1, p.prior.b = 1, verbose)
 
 \item{p.prior.b}{shape2 parameter for beta prior on p}
 
-\item{verbose}{Print messages}
+\item{mix}{Create a mixture}
 }
 \value{
 Probability density function for paramater p
 }
 \description{
 Fixed Weight Power Prior for Binomial Data
+}
+\examples{
+\donttest{
+xh <- c(30,40,50)
+nh <- c(90,95,110)
+fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
+fix.5 <- binom.PP.FIX(x=xh, n=nh, d=0.5, mix=TRUE) #use 0.5 for all studies
+}
 }
