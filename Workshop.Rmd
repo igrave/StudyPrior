@@ -6,10 +6,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE)
 ```
 
-## Practical 1
+## Practical 1: Analysis of clinical trials using single historical control dataset
+
+**Data Description:** Taken from Neuenschwander 2010 clinical trials paper, designing a Phase IV trial comparing a control treatment and a new intensified treatment of the same compound.  The primary outcome is treatment failure (binary). There are 11 internal historical trials of essentially the same trial design. 
 
 
 ```{r data}
@@ -22,9 +24,17 @@ n.c <- 80
 
 x.t <- 8
 n.t <- 80
+
+
+knitr::kable(data.frame(Study = 1:11,
+                        Failures = paste0(x.hist,'/',n.hist),
+                        Percent = paste0(round(p.hist*100),'%')),
+             col.names = c("Study","Failures/Controls","Failure %"),
+             align='c')
+
 ```
 
-Make the priors
+A new study takes place and there are 12 failures out of 80 controls (15%) and 8 failures out of 80 people on the new intensified treatment (10%).
 
 ```{r}
 
