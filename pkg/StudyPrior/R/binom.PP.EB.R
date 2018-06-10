@@ -60,12 +60,15 @@ binom.PP.EB <- function(x, n, X, N, verbose=FALSE, mc.cores=1, p.prior.a=1, p.pr
   })
  
  if(mix){ #return mixture object
-   return(
-     lapply(ds, function(d)
-       create.mixture.prior("beta", pars = matrix(c(p.prior.a + sum(x*d),p.prior.b + sum(d*(n-x))),nrow=1)
-     ))
-   ) 
- } else{ #return simple function
+   ret.obj <- lapply(ds, function(d){
+     obj <- create.mixture.prior("beta", pars = matrix(c(p.prior.a + sum(x*d),p.prior.b + sum(d*(n-x))),nrow=1))
+     attr(obj, "powers") <- d
+     obj
+   })
+    if(length(ret.obj)==1) ret.obj <- ret.obj[[1]]
+return(ret.obj)
+ 
+  } else{ #return simple function
    f <- function(p,X) {
      d <- ds[[X+1]]
      dbeta(p,p.prior.a + sum(x*d), p.prior.b + sum(d*(n-x)))

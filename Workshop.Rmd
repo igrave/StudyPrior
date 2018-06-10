@@ -231,19 +231,74 @@ q2.MAP.robust <- make.robust(MAP4, 0.1)
 q2.MAP.robust.post <- posterior.mixture.prior(x.c,n.c, mix=q2.MAP.robust)
 ```
 
-    + For each analysis, compute the posterior probability that the new treatment is better than control, and also record the prior and posterior weights for each mixture component in the table below.
+ c. Fit a power prior with fixed parameter for all studies
+```{r}
+q2.fix <- binom.PP.FIX(x.hist, n.hist, d=0.4 , mix = TRUE)
+q2.fix.diff <- binom.PP.FIX(x.hist, n.hist, d=rep(c(0.8,0.4), times=c(5,6)), mix = TRUE)
+
+q2.fix.post <- posterior.mixture.prior(x.c, n.c, mix=q2.fix)
+q2.fix.diff.post <- posterior.mixture.prior(x.c, n.c, mix=q2.fix.diff)
+```
+ 
+ 
+ d. Fit a power prior using the joint approach (as in 1e in practical 1). Choose the parameters for the prior on the the weights.
+```{r}
+q2.FB <- binom.PP.FB(x.hist, n.hist,
+                     d.prior.a = 1, d.prior.b=1,
+                     p.prior.a = 1, p.prior.b = 1,
+                     mix = TRUE)
+
+q2.FB.post <- posterior.mixture.prior(x.c, n.c, mix=q2.FB)
+```
+
+
+ e. Fit a power prior using the emprical Bayes approach to choose the parameters
+```{r}
+q2.EB <- binom.PP.EB(x.hist, n.hist,X = x.c, n.c, mix = TRUE)
+attr(q2.EB,"powers")
+
+q2.EB.post <- posterior.mixture.prior(x.c, n.c, mix=q2.EB)
+```
+ 
+ 
+ + For each analysis, compute the posterior probability that the new treatment is better than control, and also record the prior and posterior weights for each mixture component in the table below.
 ```{r}
 prob.control.smaller(x.t,n.t, posterior=q2.MAP4.post)
 prob.control.smaller(x.t,n.t, posterior=q2.MAP.robust.post)
+
+prob.control.smaller(x.t,n.t, posterior=q2.fix.post)
+prob.control.smaller(x.t,n.t, posterior=q2.fix.diff.post)
+
+prob.control.smaller(x.t,n.t, posterior=q2.FB.post)
+prob.control.smaller(x.t,n.t, posterior=q2.EB.post)
+
 
 plot(MAP4)
 plot(q2.MAP.robust, col=2, add=TRUE)
 
 plot(q2.MAP4.post, add=TRUE, lty=2)
 plot(q2.MAP.robust.post, col=2, lty=2, add=TRUE)
+
+plot(q2.FB.post, add=TRUE, col=3, lty=3)
+plot(q2.EB.post, add=TRUE, col=4, lty=3)
+
+points(y=rep(0,length(x.hist)), x=x.hist/n.hist,  col="grey")
+points(y=0, x=x.c/n.c)
+
 ```
 
+
+
+
+
 4. If you have time, repeat some of the above with a different current study (e.g. 36 failures out of 320 controls and 32 failures out of 320 people on the new intensified treatment, or make up your own new study data)
+
+```{r}
+# x.c <- 36
+# n.c <- 320
+# x.t <- 32
+# n.t <- 320
+```
 
 
 
@@ -253,13 +308,13 @@ plot(q2.MAP.robust.post, col=2, lty=2, add=TRUE)
 
 1. Use the MAP prior that you fitted to all the historical control trials in Practical 2 to help design a new study.
 
-    a. Use a standard sample size calculation (Lecture 6 slide 13 or proc power) to calculate the sample size for a new study ignoring the historical data to have 80% power and 5% type 1 error rate, and assuming that the control treatment has a 22% failure chance and the experimental treatment has a 15% failure chance 
+ a. Use a standard sample size calculation (Lecture 6 slide 13 or proc power) to calculate the sample size for a new study ignoring the historical data to have 80% power and 5% type 1 error rate, and assuming that the control treatment has a 22% failure chance and the experimental treatment has a 15% failure chance 
 
-    b. Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)
+  b. Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)
 
-    c. Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation – see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat < Control)>0.975).
+  c. Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation – see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat < Control)>0.975).
 
-    d. For the scenario in (c) above, compute the type 1 error for the trial design (Hint: use simulation as before, but generate replicate datasets under the null rather than alternative hypothesis).
+  d. For the scenario in (c) above, compute the type 1 error for the trial design (Hint: use simulation as before, but generate replicate datasets under the null rather than alternative hypothesis).
 
 2. Repeat (b) – (d) in the previous question using the Robust MAP prior from Practical 3. If you have time, try different robust MAP priors with different weights on the robust component (e.g. 0.1 and 0.5). Comment on the differences in your results for the MAP prior and the different Robust MAP priors.  
 
@@ -268,15 +323,15 @@ plot(q2.MAP.robust.post, col=2, lty=2, add=TRUE)
 
 1. A trial has been planned using the same design parameters as in part A, i.e. 80% power assuming a 22% failure chance on current controls and 15% failure on experimental treatment. This gives a target sample size of 482 subjects per arm, but you want to reduce the total number of controls recruited by making use of the historical control data. An interim analysis is planned to occur halfway through the current study (i.e. after 241 subjects per arm have been recruited).
 
-    a. Generate a single set of interim data collected on 241 control subjects and 241 treatment subjects on the number of failures in both treatments arms at the interim analysis. These data should be generated under the alternative hypothesis. 
+  a. Generate a single set of interim data collected on 241 control subjects and 241 treatment subjects on the number of failures in both treatments arms at the interim analysis. These data should be generated under the alternative hypothesis. 
 
-    b. How many more controls do you need to recruit in the remainder of the trial (after the interim) in order to achieve the target total control sample size of 482? Hint: this is similar to what you did for Practical 1 question (1d) but now you are combining the historical data with the interim data. First compute the posterior mean of the power prior parameter a0 using the interim control data. Then calculate the posterior distribution of the control rate at interim using the power prior with the posterior mean of a0 as a plug-in estimate to combine the historical data with the interim data set that you generated in (a). What is the effective sample size (ESS) of this interim posterior distribution? (See slide 12 of Lecture 6 and slide 20 of Lecture 2). How many more controls do you need to recruit in the remainder of the trial in order to achieve the target sample size of 482?
+  b. How many more controls do you need to recruit in the remainder of the trial (after the interim) in order to achieve the target total control sample size of 482? Hint: this is similar to what you did for Practical 1 question (1d) but now you are combining the historical data with the interim data. First compute the posterior mean of the power prior parameter a0 using the interim control data. Then calculate the posterior distribution of the control rate at interim using the power prior with the posterior mean of a0 as a plug-in estimate to combine the historical data with the interim data set that you generated in (a). What is the effective sample size (ESS) of this interim posterior distribution? (See slide 12 of Lecture 6 and slide 20 of Lecture 2). How many more controls do you need to recruit in the remainder of the trial in order to achieve the target sample size of 482?
     
-    c. Using simulation confirm the conditional power of the new design at the planned treatment effect (Hint – simulate replicate datasets under the alternative hypothesis for the remaining 241 subjects on treatment, and the remaining 482-ESS control subjects; for each replicate dataset compute the posterior probability that Pr(Treat < Control) and an indicator of whether this probability >0.975 by simulating from the appropriate posterior for the treatment and control rates (this is similar to the calculation of power for the MAP prior in qu 1c or Part A of Practical 5, but this time you should use the power prior for the control arm rather than MAP prior; make sure you include both the interim data and the predicted data for the rest of the trial when computing the posteriors).
+  c. Using simulation confirm the conditional power of the new design at the planned treatment effect (Hint – simulate replicate datasets under the alternative hypothesis for the remaining 241 subjects on treatment, and the remaining 482-ESS control subjects; for each replicate dataset compute the posterior probability that Pr(Treat < Control) and an indicator of whether this probability >0.975 by simulating from the appropriate posterior for the treatment and control rates (this is similar to the calculation of power for the MAP prior in qu 1c or Part A of Practical 5, but this time you should use the power prior for the control arm rather than MAP prior; make sure you include both the interim data and the predicted data for the rest of the trial when computing the posteriors).
     
-    d. Investigate the efficiency of the study design with and without the historical data, by repeating step c above but this time ignoring the historical data (Hint – simulate replicate datasets under the alternative for 241 remaining subjects on treatment and 241 remaining controls, and compute the posterior distributions assuming vague priors for both the treatment and control rates). Compare the conditional power of this design to that obtained in part c above. 
+  d. Investigate the efficiency of the study design with and without the historical data, by repeating step c above but this time ignoring the historical data (Hint – simulate replicate datasets under the alternative for 241 remaining subjects on treatment and 241 remaining controls, and compute the posterior distributions assuming vague priors for both the treatment and control rates). Compare the conditional power of this design to that obtained in part c above. 
     
-    e. Repeat steps a-c above using the robust mixture prior (i.e. a mixture of the beta posterior distribution for the historical study and a beta(1,1) distribution with appropriate weights, e.g. 0.9 and 0.1 respectively, or 0.5 and 0.5) instead of the power prior to downweight the historical data, and compare your results. (Hint: you will need to first compute the posterior mixture distribution given the interim data, then use the Morita et al method for calculating the ESS in part b for the interim posterior mixture; then use the interim posterior mixture as the prior for post-interim data and compute updated posteriors for each replicate dataset generated under the alternative, in order to evaluate the conditional power).
+  e. Repeat steps a-c above using the robust mixture prior (i.e. a mixture of the beta posterior distribution for the historical study and a beta(1,1) distribution with appropriate weights, e.g. 0.9 and 0.1 respectively, or 0.5 and 0.5) instead of the power prior to downweight the historical data, and compare your results. (Hint: you will need to first compute the posterior mixture distribution given the interim data, then use the Morita et al method for calculating the ESS in part b for the interim posterior mixture; then use the interim posterior mixture as the prior for post-interim data and compute updated posteriors for each replicate dataset generated under the alternative, in order to evaluate the conditional power).
 
 2. Think about how you would embed the above steps into a simulation study to exploring the operating characteristics of such a design at the planning stages of the trial. 
 
