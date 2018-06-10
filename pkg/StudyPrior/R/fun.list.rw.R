@@ -77,6 +77,32 @@ update.mixture.prior <- function(object, ..., pars, weights ){
   return(object)
 }
 
+#' Add a vague componenet to mixture model to make robust
+#'
+#' @param object mixture.prior to update 
+#' @param weight weight of vague component in updated model
+#'
+#' @return A \code{mixture.prior} object with updated weights and parameters
+#'  
+#' @method update mixture.prior
+make.robustr <- function(object, weight ){
+  
+  if(inherits(pool, "beta")) {
+    
+    w <- attr(object,"weights")
+    attr(object,"weights") <- c(w*(1-weight), weight)
+    
+    attr(object,"pars") <- rbind(attr(object, "pars") , c(1,1))
+    
+    if(length( attr(object,"weights")) == nrow( attr(object,"pars"))){
+      attr(object,"degree") <- length(attr(object,"weights"))
+    } else(stop("Degree mismatch between weights and parameters"))
+    
+    
+    return(object)
+  } else(stop("Only implemented for Beta mixture models."))
+}
+
 
 
 #' Get density of mixture
