@@ -2,11 +2,14 @@
 title: "Historical data workshop"
 author: "Isaac Gravestock"
 date: "5 June 2018"
-output: html_document
+output:
+  html_document:
+    code_folding: hide
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, eval=FALSE)
 ```
 
 ## Practical 1: Analysis of clinical trials using single historical control dataset
@@ -15,16 +18,14 @@ knitr::opts_chunk$set(echo = FALSE, message=FALSE)
 
 
 ```{r data}
+
+library(StudyPrior)
+library(INLA)
+
+
 x.hist <- c(6,8,17,28,26,8,22,8,6,16,53)
 n.hist <- c(33,45,74,103,140,49,83,59,22,109,213)
 p.hist <- x.hist/n.hist
-
-x.c <- 12
-n.c <- 80
-
-x.t <- 8
-n.t <- 80
-
 
 knitr::kable(data.frame(Study = 1:11,
                         Failures = paste0(x.hist,'/',n.hist),
@@ -37,19 +38,245 @@ knitr::kable(data.frame(Study = 1:11,
 A new study takes place and there are 12 failures out of 80 controls (15%) and 8 failures out of 80 people on the new intensified treatment (10%).
 
 ```{r}
+x.c <- 12
+n.c <- 80
 
-library(StudyPrior)
-library(INLA)
-
-pool <- binom.PP.FIX(x=x.hist, n=n.hist, d=1, mix = TRUE)
-
-pp08 <- binom.PP.FIX(x=x.hist, n=n.hist, d=0.8, mix = TRUE)
-
-pp01 <- binom.PP.FIX(x=x.hist, n=n.hist, d=0.1, mix = TRUE)
-
-
-plot(pool, at=seq(0,1,len=500), xlab="p")
-plot(pp08, lines.only=TRUE, col=2, at=seq(0,1,len=500))
-plot(pp01, lines.only=TRUE, col=3, at=seq(0,1,len=500))
+x.t <- 8
+n.t <- 80
 ```
+
+1. Take one historical study (different people should choose different studies, so we don’t all do the same one!) and calculate the probability that the new treatment is better than the “control” less intensive treatment (i.e. new treatment has lower failure rate) using each of the methods below. Complete the table below with the results from each analysis. You may also find it useful to produce plots of the posteriors for the control arm rate and for the treatment difference under each method.
+```{r}
+my.choice <- 3
+
+x.h <- x.hist[[my.choice]]
+n.h <- n.hist[[my.choice]]
+```
+    
+  a. Only using the new study data (i.e. no historical data) (Hint: use simulation or numerical integration to compute Pr(treatment failure < control failure); see Lecture 2 slide 5)
+```{r}
+#approximate with a Riemann sum
+p <- seq(0,1,len=2000)
+mean(dbeta(p, 1+x.c, 1+n.c-x.c) *
+        pbeta(p, 1+x.t, 1+n.t-x.t, lower.tail = FALSE))
+
+# numerical integration
+integrate(function(p) dbeta(p, 1+x.c, 1+n.c-x.c) *
+            pbeta(p, 1+x.t, 1+n.t-x.t, lower.tail = FALSE),
+          lower=0, upper=1)
+
+
+#Using the package StudyPrior
+q1.nohist <- create.mixture.prior("beta",pars=matrix(c(1,1),ncol=2))
+q1.nohist.post <- posterior.mixture.prior(x.c, n.c, mix=q1.nohist)
+
+prob.control.smaller(xt=x.t, nt=n.t, posterior=q1.nohist.post)
+```
+    
+  b. Pooling historical data (Hint: use simulation or numerical integration; see Lecture 2 slide 11-12)
+```{r}
+q1.pool <- binom.PP.FIX(x=x.h, n=n.h, d=1, mix = TRUE)
+q1.pool.post <- posterior.mixture.prior(x.c, n.c, mix=q1.pool)
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.post)
+```
+  c. Using a power prior with fixed power parameters (Lecture 2 slide 14-15)
+    + 0.8
+    + 0.1
+```{r}
+q1.pp08 <- binom.PP.FIX(x=x.h, n=n.h, d=0.8, mix = TRUE)
+q1.pp08.post <- posterior.mixture.prior(x.c, n.c, mix=q1.pp08)
+
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pp08.post)
+
+q1.pp01 <- binom.PP.FIX(x=x.h, n=n.h, d=0.1, mix = TRUE)
+q1.pp01.post <- posterior.mixture.prior(x.c, n.c, mix=q1.pp01)
+
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pp01.post)
+```
+
+  d. Estimating the posterior mean of the power prior and using this as a plug-in value (Hint: to compute the posterior mean of a0 you will need to select an appropriate prior for a0. You will then need to use either simulation to sample directly from the posterior for a0 (see Lecture 2 slide 20; use proc mcmc) or numerical integration to compute the integral on slide 24 of Lecture 2)
+
+```{r}
+f.a0 <- function(a0,Nh,Rh,N,R,a,b) {
+  logf <- {lgamma(a0*Nh+a+b) + lgamma(a0*Rh+R+a) + lgamma(a0*(Nh-Rh)+N-R+b)}-
+  {lgamma(a0*Rh+a) + lgamma(a0*(Nh-Rh)+b) + lgamma(a0*Nh+N+a+b)}
+  exp(logf)
+}
+
+k <- integrate(function(a0) f.a0(a0, n.h, x.h, n.c, x.c, a=1, b=1), lower=0,upper=1)
+
+plot(p, f.a0(p, n.h, x.h, n.c, x.c, a=1, b=1)/k$value, type='l',
+     xlab="a0",ylab="posterior density")
+
+mean.a0 <- integrate(function(a0) a0 * f.a0(a0, n.h, x.h, n.c, x.c, a=1, b=1)/k$value,
+                     lower=0,upper=1) 
+mean.a0$value
+
+q1.pp.mean <- binom.PP.FIX(x.h, n.h, d=mean.a0$value, mix=TRUE)
+
+q1.pp.mean.post <- posterior.mixture.prior(x.c,n.c, mixture.prior = q1.pp.mean)
+plot(q1.pp.mean.post)
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pp.mean.post)
+```
+
+    
+  e. Estimating the power prior jointly with the control failure rate (see Lecture 2 slide 18)
+    
+```{r}
+q1.joint <- binom.PP.FB(x.h, n.h,  d.prior.a=1, d.prior.b=1, mix = TRUE)
+q1.joint.01 <- binom.PP.FB(x.h, n.h, d.prior.a=0.02, d.prior.b=0.02, mix = TRUE)
+
+q1.joint.post <- posterior.mixture.prior(x.c,n.c, mixture.prior = q1.joint)
+q1.joint.01.post <- posterior.mixture.prior(x.c,n.c, mixture.prior = q1.joint.01)
+
+plot(q1.joint.post)
+plot(q1.joint.01.post, add=TRUE, col=2)
+
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.joint.post)
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.joint.01.post)
+```
+    
+    
+  <!-- f. A commensurate prior approach (Hint: fit a full Bayesian model for historical and current data using proc mcmc; see Lecture 2 slide 26) -->
+    
+  g. Try to add a robust component to the different priors.
+```{r}
+q1.pool.robust <- make.robust(q1.pool, 0.5)
+plot(q1.pool)
+plot(q1.pool.robust, add=TRUE, col=2)
+
+q1.pool.robust.post <- posterior.mixture.prior(x.c,n.t, mix=q1.pool.robust)
+
+plot(q1.pool.post, lty=2, add=TRUE)
+plot(q1.pool.robust.post, add=TRUE, col=2, lty=2)
+
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.post)
+prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.robust.post)
+```
+  
+    
+2. If you have time, repeat some of the above with either a different historical trial or a different dataset for the new study.
+
+```{r}
+my.choice <- 7
+```
+
+
+## Practical 2: Analysis of clinical trial using multiple historical control datasets
+
+Using the historical trials from Neuenschwander 2010 introduced in Practical 1.
+
+1. Do a meta analysis of all the studies to obtain a meta-analytic predictive (MAP) prior distribution.
+```{r}
+
+q2.MAP <- binom.MAP.FB(x.hist, n.hist)
+```
+
+
+2. Complete the following steps to fit a mixture of beta distributions to approximate the MAP prior:
+
+    <!-- a. From the predictive distribution obtain the Rao-Blackwellised density estimates, and plot this density. -->
+
+  b. Fit a mixture of beta distributions to the MAP prior distribution with 1,2 and 3 components. Report the values of the fitted Beta parameters and the mixture weights for each fitted distribution.
+
+```{r}
+MAP4 <- conj.approx(q2.MAP, type="beta", max.degree = 4)
+MAP3 <- conj.approx(q2.MAP, type="beta", max.degree = 3)
+MAP2 <- conj.approx(q2.MAP, type="beta", max.degree = 2)
+MAP1 <- conj.approx(q2.MAP, type="beta", max.degree = 1)
+
+p <- seq(0,1,len=500)
+plot(p, q2.MAP(p), type='l')
+
+plot(MAP1, col=2, add=TRUE)
+plot(MAP2, col=3, add=TRUE)
+plot(MAP3, col=4, add=TRUE)
+plot(MAP4, col=5, add=TRUE)
+
+
+```
+
+  c. Compare the components to the fitted density using the Kullback-Leibler divergence criterion to decide upon the best fit
+    
+```{r}
+
+KLD <- function(prior){
+  integrate(function(p) q2.MAP(p) *(log(q2.MAP(p)) - log(eval.mixture.prior(p,mixture=prior))),
+            lower=0.1, upper=.9)
+}
+
+KLD(MAP1)
+KLD(MAP2)
+KLD(MAP3)
+KLD(MAP4)
+
+```
+
+    
+
+3. With the same new study data as Practical 1 (i.e. 12 failures out of 80 controls and 8 failures out of 80 people on the new intensified treatment), do an analysis of the data using: 
+
+  a. the best MAP prior approximation 
+
+```{r}
+q2.MAP4.post <- posterior.mixture.prior(x.c,n.c, mix=MAP4)
+```
+
+
+ b. a robust version of the MAP prior built by adding a fourth component Beta(1,1) with weight 0.1
+
+
+```{r}
+q2.MAP.robust <- make.robust(MAP4, 0.1)
+q2.MAP.robust.post <- posterior.mixture.prior(x.c,n.c, mix=q2.MAP.robust)
+```
+
+    + For each analysis, compute the posterior probability that the new treatment is better than control, and also record the prior and posterior weights for each mixture component in the table below.
+```{r}
+prob.control.smaller(x.t,n.t, posterior=q2.MAP4.post)
+prob.control.smaller(x.t,n.t, posterior=q2.MAP.robust.post)
+
+plot(MAP4)
+plot(q2.MAP.robust, col=2, add=TRUE)
+
+plot(q2.MAP4.post, add=TRUE, lty=2)
+plot(q2.MAP.robust.post, col=2, lty=2, add=TRUE)
+```
+
+4. If you have time, repeat some of the above with a different current study (e.g. 36 failures out of 320 controls and 32 failures out of 320 people on the new intensified treatment, or make up your own new study data)
+
+
+
+## Practical 3: Designing at trial that includes historical controls
+
+**Part A:** Use all the historical trials from Neuenschwander 2010 introduced in Practical 1. In this question, you will look at how the historical controls can be used to either reduce the number of current controls recruited in the new study, or increase the overall power.
+
+1. Use the MAP prior that you fitted to all the historical control trials in Practical 2 to help design a new study.
+
+    a. Use a standard sample size calculation (Lecture 6 slide 13 or proc power) to calculate the sample size for a new study ignoring the historical data to have 80% power and 5% type 1 error rate, and assuming that the control treatment has a 22% failure chance and the experimental treatment has a 15% failure chance 
+
+    b. Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)
+
+    c. Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation – see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat < Control)>0.975).
+
+    d. For the scenario in (c) above, compute the type 1 error for the trial design (Hint: use simulation as before, but generate replicate datasets under the null rather than alternative hypothesis).
+
+2. Repeat (b) – (d) in the previous question using the Robust MAP prior from Practical 3. If you have time, try different robust MAP priors with different weights on the robust component (e.g. 0.1 and 0.5). Comment on the differences in your results for the MAP prior and the different Robust MAP priors.  
+
+
+**Part B:** For computational simplicity, for this part of the practical, you should just pick one of the historical trials from Neuenschwander 2010 introduced in Practical 1. In this question, you will look at how to adapt the control sample size following an interim analysis to re-assess the ESS of the historical controls (see slide 17 in lecture 6). You should start by using the power prior method with plug-in estimate of the power parameter a0 equal to its posterior mean given the interim data, in order to downweight the historical data. 
+
+1. A trial has been planned using the same design parameters as in part A, i.e. 80% power assuming a 22% failure chance on current controls and 15% failure on experimental treatment. This gives a target sample size of 482 subjects per arm, but you want to reduce the total number of controls recruited by making use of the historical control data. An interim analysis is planned to occur halfway through the current study (i.e. after 241 subjects per arm have been recruited).
+
+    a. Generate a single set of interim data collected on 241 control subjects and 241 treatment subjects on the number of failures in both treatments arms at the interim analysis. These data should be generated under the alternative hypothesis. 
+
+    b. How many more controls do you need to recruit in the remainder of the trial (after the interim) in order to achieve the target total control sample size of 482? Hint: this is similar to what you did for Practical 1 question (1d) but now you are combining the historical data with the interim data. First compute the posterior mean of the power prior parameter a0 using the interim control data. Then calculate the posterior distribution of the control rate at interim using the power prior with the posterior mean of a0 as a plug-in estimate to combine the historical data with the interim data set that you generated in (a). What is the effective sample size (ESS) of this interim posterior distribution? (See slide 12 of Lecture 6 and slide 20 of Lecture 2). How many more controls do you need to recruit in the remainder of the trial in order to achieve the target sample size of 482?
+    
+    c. Using simulation confirm the conditional power of the new design at the planned treatment effect (Hint – simulate replicate datasets under the alternative hypothesis for the remaining 241 subjects on treatment, and the remaining 482-ESS control subjects; for each replicate dataset compute the posterior probability that Pr(Treat < Control) and an indicator of whether this probability >0.975 by simulating from the appropriate posterior for the treatment and control rates (this is similar to the calculation of power for the MAP prior in qu 1c or Part A of Practical 5, but this time you should use the power prior for the control arm rather than MAP prior; make sure you include both the interim data and the predicted data for the rest of the trial when computing the posteriors).
+    
+    d. Investigate the efficiency of the study design with and without the historical data, by repeating step c above but this time ignoring the historical data (Hint – simulate replicate datasets under the alternative for 241 remaining subjects on treatment and 241 remaining controls, and compute the posterior distributions assuming vague priors for both the treatment and control rates). Compare the conditional power of this design to that obtained in part c above. 
+    
+    e. Repeat steps a-c above using the robust mixture prior (i.e. a mixture of the beta posterior distribution for the historical study and a beta(1,1) distribution with appropriate weights, e.g. 0.9 and 0.1 respectively, or 0.5 and 0.5) instead of the power prior to downweight the historical data, and compare your results. (Hint: you will need to first compute the posterior mixture distribution given the interim data, then use the Morita et al method for calculating the ESS in part b for the interim posterior mixture; then use the interim posterior mixture as the prior for post-interim data and compute updated posteriors for each replicate dataset generated under the alternative, in order to evaluate the conditional power).
+
+2. Think about how you would embed the above steps into a simulation study to exploring the operating characteristics of such a design at the planning stages of the trial. 
 
