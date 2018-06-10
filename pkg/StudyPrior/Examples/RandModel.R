@@ -28,14 +28,12 @@ gen.models <- function(I){
   
   xh <- mapply(rbinom, size=nh, n=1, prob=z)
   
-  
-  
-  binom.PP.EB(xh, nh, N=NN, mix = TRUE) -> a
-  binom.PP.EB.Sep(xh, nh, N=NN,mix = TRUE) -> b
-  binom.PP.EB(sum(xh), sum(nh), N=NN, mix=TRUE) -> c
+  binom.PP.EB.Mix(xh, nh, N=NN) -> a
+  binom.PP.EB.Sep.Mix(xh, nh, N=NN) -> b
+  binom.PP.EB.Mix(sum(xh), sum(nh), N=NN) -> c
   binom.PP.FB.COR(xh, nh, d.prior.cor = 0, mix=TRUE) -> d
-  # binom.PP.FB.COR(xh, nh, d.prior.cor = .5, mix=TRUE) -> e
-  # binom.PP.FB.COR(xh, nh, d.prior.cor = 1, mix=TRUE) -> f
+  binom.PP.FB.COR(xh, nh, d.prior.cor = .5, mix=TRUE) -> e
+  binom.PP.FB.COR(xh, nh, d.prior.cor = 1, mix=TRUE) -> f
   
   binom.MAP.FB(xh, nh) -> map.1
   conj.approx(distr = map.1,type = 'beta', max.degree = 10) -> g
@@ -44,18 +42,9 @@ gen.models <- function(I){
                        pars = rbind(attr(g,"pars"),c(1,1)),
                        weights = c(0.5*attr(g,"weights"),0.5)) -> h
   
-  
-  
-  binom.PP.EB(xh, nh, N=NN, mix = TRUE, max.dn = 75) -> e
-  create.mixture.prior("beta",
-                       pars = rbind(attr(a,"pars"),c(1,1)),
-                       weights = c(0.5*attr(a,"weights"),0.5)) -> f
-  
-  
-  
   create.mixture.prior("beta",pars=matrix(c(1,1),ncol=2))->k
   
-  list.prior <- list(a,b,c,d,e,f,g,h,k)[c(1,2,3,5,6,7,8,9)]
+  list.prior <- list(a,b,c,d,e,f,g,h,k)
   
   lapply(list.prior, function(priors){
     if(length(priors)>1) {
@@ -78,7 +67,7 @@ gen.models <- function(I){
 calc.oc <- function(I){
   try( {load(file=paste0('models_',formatC(I, width=4, flag="0"),'.rda'))
   
-    list.posterior <- list.posterior
+    
    ess <- lapply(list.posterior, function(p) sapply(p, ess.mixture.prior))
     
     mse <- lapply(list.posterior,
@@ -103,7 +92,7 @@ calc.oc <- function(I){
     
     t1e <- lapply(SIGMAT,
                     function(S) calc.power(sig.mat=S, n.binom.control = NN, n.binom.treatment = NT, 
-                                           prob.range = c(0,0.85), length = 200, treatment.difference = 0))
+                                           prob.range = c(0,0.9), length = 200, treatment.difference = 0))
  
     
     save(file=paste0('oc_',formatC(I, width=4, flag="0"),'.rda'),
