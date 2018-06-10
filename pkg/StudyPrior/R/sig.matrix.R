@@ -187,3 +187,41 @@ prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
   }
 }
 
+
+#' Calculate if the the control parameter is smaller than the treatment parameter
+#'
+#' @param xt number of events in the treatment arm
+#' @param nt number of of patients in the treatment arm
+#' @param posterior Posterior mixture.prior object
+#' @param prior mixture.prior object to calculate posterior using nc and xc
+#' @param xc number of events in the control arm
+#' @param nc number of patients in the control 
+#'
+#' @return
+#' @export
+#'
+prob.control.smaller <- function(xt,nt, posterior, xc,nc, prior,  level=0.975){
+  if(missing(posterior)) posterior <- posterior.mixture.prior(xs=xt, ns=nt, mixture.prior = prior)
+  
+  w <- attr(posterior,"weights")
+  par <- attr(posterior,"pars")
+  OK <- length(w) > 20
+  
+  sapply(xt, function(xt) {
+  #   StudyPrior:::prXY(xt+1,nt-xt+1, par[,1],par[,2], approx.allowed=OK, force=TRUE)  %*% w
+  # })-> prob 
+  # 
+  #   redo <- (which(abs(1-prob-level)/level < 0.03))
+  # #recalculate without approximation
+  # 
+  # prob[redo] <- sapply(xt[redo], function(xt) {
+    prXY(xt+1,nt-xt+1, par[,1],par[,2], approx.allowed=FALSE, force=FALSE)  %*% w
+  }) -> prob
+  
+  1-prob
+}
+
+
+
+
+

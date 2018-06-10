@@ -15,7 +15,7 @@ export(binom.PP.EB.Sep)
 export(binom.PP.FB.MC.BE)
 
 export(binom.PP.FB)
-export(binom.PP.FB.COR)
+#export(binom.PP.FB.COR)
 export(binom.PP.FIX)
 export(binom.prior)
 export(bool.mat.plot)
@@ -45,6 +45,8 @@ export(posterior.mixture.prior)
 export(q.mixture.prior)
 export(sample.mixture.prior)
 export(sig.matrix)
+export(prob.control.smaller)
+export(make.robust)
 
 export(install.inla)
 

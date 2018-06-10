@@ -85,9 +85,9 @@ update.mixture.prior <- function(object, ..., pars, weights ){
 #' @return A \code{mixture.prior} object with updated weights and parameters
 #'  
 #' @method update mixture.prior
-make.robustr <- function(object, weight ){
+make.robust <- function(object, weight ){
   
-  if(inherits(pool, "beta")) {
+  if(inherits(object, "beta")) {
     
     w <- attr(object,"weights")
     attr(object,"weights") <- c(w*(1-weight), weight)
@@ -196,14 +196,16 @@ eval.mixture.prior <- function(x, mixture.prior, subset){
 #' }
 
 
-plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=FALSE){
+plot.mixture.prior <- function(x,..., at=seq(0,1,0.005), stack=FALSE, lines.only=FALSE, add=FALSE){
   
+  if(add) lines.only <- TRUE
   
   mixture.prior <- x
   
+  parameter <- at
   
-  Y <- eval.mixture.prior(at, mixture.prior)
-  if(!lines.only) plot(at,Y, type='n', ...)
+  density <- eval.mixture.prior(parameter, mixture.prior)
+  if(!lines.only) plot(parameter,density, type='n', ...)
 
 
   if(stack==TRUE){
@@ -213,11 +215,11 @@ plot.mixture.prior <- function(x,..., at=seq(0,1,0.01), stack=FALSE, lines.only=
 
     for(i in 1:(attr(mixture.prior,"degree")-1)){
 
-      lines(at,eval.mixture.prior(at, mixture.prior,subset=z[1:i]), type='l', ...)
+      lines(parameter,eval.mixture.prior(parameter, mixture.prior,subset=z[1:i]), type='l', ...)
 
     }
   }
-  lines(at, Y, type='l', ...)
+  lines(parameter, density, type='l', ...)
 }
 
 #' Calculate the equivalent sample size of mixture model
