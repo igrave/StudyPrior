@@ -8,7 +8,7 @@
 #' @param mc.cores number of cores for parallel
 #' @param p.prior.a shape1 parameter of initial beta prior for successes
 #' @param p.prior.b shape2 parameter of initial beta prior for successes 
-#' @param max.dn Set a limit on the sum of the weights*n
+#' @param max.dn Set a limit on the sum of the weights*n (FALSE or a numerical value)
 #' @param mix if TRUE return a mixture.prior object otherwise the function
 #'
 #' @return Either a list of mixture.prior objects which can be evaluated with eval.mixture.prior or a density function of the probability parmater p given X.
