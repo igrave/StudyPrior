@@ -164,6 +164,7 @@ sigmat2 <- function(n.control, n.treatment, level, posterior, check.xs, check.xt
     })
     
     prob
+    
     #end loop over mixture
   }) -> all.probs #end xs
   # browser()
@@ -173,6 +174,7 @@ sigmat2 <- function(n.control, n.treatment, level, posterior, check.xs, check.xt
 
 #Analytical (and fast approximation for) calculation  of probability beta RV is larger than another
 prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
+  ans <-
   if(force | (a>5 &&b>10 && approx.allowed)){ 
     # cat("A")
     #for large values do a normal approximation based on moments
@@ -182,9 +184,17 @@ prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
     #finite sum of beta functions
     sapply(1:length(c),function(i) {
       j <- a:(a+b-1)
-      1 / beta(c[i],d[i]) * sum(choose(a+b-1,j)*beta(a+b+d[i]-j-1, c[i]+j))}
+      
+      
+      # sum(1 / beta(c[i],d[i]) * choose(a+b-1,j)*beta(a+b+d[i]-j-1, c[i]+j))
+      sum(exp(-lbeta(c[i],d[i]) + lchoose(a+b-1,j) + lbeta(a+b+d[i]-j-1, c[i]+j)  ))
+      # 1 / beta(c[i],d[i]) * sum(choose(a+b-1,j)*beta(a+b+d[i]-j-1, c[i]+j))
+  }
     )
   }
+  
+  if(any(is.na(ans))) browser()
+  ans
 }
 
 
