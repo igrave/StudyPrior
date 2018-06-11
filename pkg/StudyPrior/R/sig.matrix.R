@@ -197,10 +197,9 @@ prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
 #' @param xc number of events in the control arm
 #' @param nc number of patients in the control 
 #'
-#' @return
-#' @export
+#' @return the probability the control parameter is smaller than the treatment parameter
 #'
-prob.control.smaller <- function(xt,nt, posterior, xc,nc, prior,  level=0.975){
+prob.control.smaller <- function(xt,nt, posterior, xc,nc, prior){
   if(missing(posterior)) posterior <- posterior.mixture.prior(xs=xt, ns=nt, mixture.prior = prior)
   
   w <- attr(posterior,"weights")

@@ -57,7 +57,7 @@ importFrom(parallel, mclapply, mcmapply)
 
 importFrom("graphics", "abline", "box", "lines", "plot", "rect")
 
-importFrom("stats", "approxfun", "dbeta", "dbinom", "dnorm",
+importFrom("stats", "approxfun", "dbeta", "dbinom", "dnorm", "qbeta",
              "integrate", "optimise", "optimize", "pbeta", "pnorm",
              "rbeta", "rnorm", "runif", "smooth.spline", "splinefun",
              "uniroot", "weights")

@@ -4,8 +4,8 @@
 \alias{binom.prior}
 \title{Prior distribution for binomial data}
 \usage{
-binom.prior(type = c("MAP.FB", "MAP.EB", "PP.FB", "PP.EB", "PP.EB.Beta",
-  "Beta.EB", "PP.EB.Sep", "PP.Fix", "PP.Cor"), x, n, verbose = FALSE, ...)
+binom.prior(type = c("MAP.FB", "PP.FB", "PP.EB", "Beta.EB", "PP.EB.Sep",
+  "PP.Fix"), x, n, verbose = FALSE, ...)
 }
 \arguments{
 \item{type}{Which prior to provide}

@@ -84,7 +84,6 @@ update.mixture.prior <- function(object, ..., pars, weights ){
 #'
 #' @return A \code{mixture.prior} object with updated weights and parameters
 #'  
-#' @method update mixture.prior
 make.robust <- function(object, weight ){
   
   if(inherits(object, "beta")) {
@@ -118,7 +117,7 @@ make.robust <- function(object, weight ){
 #' nh <- c(90,95,110)
 #' 
 #' #fit a full Bayes power prior with 500 samples
-#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+#' fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE) 
 #' eval.mixture.prior(seq(0,1,0.1), mixture.prior = fb) #Evalute the prior
 #' }
 
@@ -178,7 +177,7 @@ eval.mixture.prior <- function(x, mixture.prior, subset){
 #' @param x a mixture prior object to plot
 #' @param at Vector of values to evaluate density at
 #' @param stack Plot the mixture components as stacked regions
-#' @param lines.only Draw lines only (to be used over an existing plot)
+#' @param add lines to an existing plot
 #' @param ... Additional arguments to \code{\link{lines}}
 #'
 #'  
@@ -187,18 +186,19 @@ eval.mixture.prior <- function(x, mixture.prior, subset){
 #' nh <- c(90,95,110)
 #' 
 #' #fit a full Bayes power prior with 500 samples
-#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+#' fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE) 
 #' 
 #' #fit a full Bayes power prior with 500 samples and correlation 0.9
-#' fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
+#' fb2 <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
 #' plot.mixture.prior(fb2, xlab="p",ylab="Density")
 #' plot.mixture.prior(fb, lines.only=TRUE, col=2)
 #' }
 
 
-plot.mixture.prior <- function(x,..., at=seq(0,1,0.005), stack=FALSE, lines.only=FALSE, add=FALSE){
+plot.mixture.prior <- function(x,..., at=seq(0,1,0.005), stack=FALSE, add=FALSE){
   
-  if(add) lines.only <- TRUE
+  
+  if(add) lines.only <- TRUE else lines.only<-FALSE
   
   mixture.prior <- x
   
@@ -231,8 +231,8 @@ plot.mixture.prior <- function(x,..., at=seq(0,1,0.005), stack=FALSE, lines.only
 #'@examples \donttest{
 #' xh <- c(30,40,50)
 #' nh <- c(90,95,110)
-#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE)
-#' fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
+#' fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE)
+#' fb2 <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
 #' ess.mixture.prior(fb2)
 #' ess.mixture.prior(fb)
 #' }
@@ -253,7 +253,7 @@ ess.mixture.prior <- function(mixture.prior){
 #' nh <- c(90,95,110)
 #' 
 #'  #fit a full Bayes power prior with 500 samples
-#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE)
+#' fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE)
 #' mean.mixture.prior(fb) #calculate the mean
 #' }
 
@@ -276,10 +276,10 @@ mean.mixture.prior <- function(x, ...){
 #' nh <- c(90,95,110)
 #' 
 #'  #fit a full Bayes power prior with 500 samples
-#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE)
+#' fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE)
 #' 
 #'  #fit a full Bayes power prior with 500 samples with correlation
-#' fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9)
+#' fb2 <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9)
 #' 
 #' # calculate the variances of the distributions
 #' var.mixture.prior(fb2)
@@ -324,7 +324,7 @@ var.mixture.prior <- function(mixture.prior){
 #' nh <- c(90,95,110)
 #' 
 #' #fit a full Bayes power prior with 500 samples
-#' fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+#' fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE) 
 #' 
 #' #calulate the posterior
 #' post.fb <- posterior.mixture.prior(xs=51, ns=100, mixture.prior=fb)

@@ -27,7 +27,7 @@ xh <- c(30,40,50)
 nh <- c(90,95,110)
 
 #fit a full Bayes power prior with 500 samples
-fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE) 
 
 #calulate the posterior
 post.fb <- posterior.mixture.prior(xs=51, ns=100, mixture.prior=fb)

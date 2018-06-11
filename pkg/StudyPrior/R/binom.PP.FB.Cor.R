@@ -10,7 +10,7 @@
 #' @param d.prior.cor Correlation parameter for transformed multivariate normal prior on weights
 #' @param mix return the mixture object
 #' @param d.prior.a shape1 parameter for beta prior on weight parameter
-#' @param d.prior.a shape1 parameter for prior on weight parameter
+#' @param d.prior.b shape2 parameter for beta prior on weight parameter
 #'
 #' @return A density function or mixture object
 #' @examples \donttest{
@@ -67,4 +67,4 @@ binom.PP.FB <- function(x, n, verbose=FALSE, mixture.size=1000, d.prior.cor=0, d
 }
 
 #For backwards compatibility
-binom.PP.FB.COR <- binom.PP.FB
+# binom.PP.FB.COR <- binom.PP.FB

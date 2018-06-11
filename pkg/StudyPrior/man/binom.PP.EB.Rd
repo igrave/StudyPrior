@@ -24,7 +24,7 @@ binom.PP.EB(x, n, X, N, verbose = FALSE, mc.cores = 1, p.prior.a = 1,
 
 \item{p.prior.b}{shape2 parameter of initial beta prior for successes}
 
-\item{max.dn}{Set a limit on the sum of the weights*n}
+\item{max.dn}{Set a limit on the sum of the weights*n (FALSE or a numerical value)}
 
 \item{mix}{if TRUE return a mixture.prior object otherwise the function}
 }

@@ -30,8 +30,7 @@ Coverage of Posterior using local smoothing with beta kernels
 xh <- c(30,40,50)
 nh <- c(90,95,110)
 fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
-post <- posterior.mixture.prior(34,75, mixture.prior = fix)  
-calc.coverage(posterior = fix, level=0.95, n.control=100, smooth=0.05)
+calc.coverage(prior = fix, level=0.95, n.control=75, smooth=0.05)
 }
 
 }

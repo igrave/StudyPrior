@@ -175,7 +175,7 @@ PP.FB.55 <- binom.PP.FB.MC.BE(x=x.multi, n=n.multi, d.prior.a = .5, d.prior.b = 
 @
 Or have correlation between the weight parameters, which shows good operating characteristics.
 <<PPCOR>>=
-PP.FB.COR <- binom.PP.FB.COR(x=x.multi, n=n.multi, d.prior.cor = 0.5)
+PP.FB.COR <- binom.PP.FB(x=x.multi, n=n.multi, d.prior.cor = 0.5)
 @
 The empirical Bayes approach is also possible.
 <<PPEB>>=
@@ -192,7 +192,7 @@ We can approximate the priors with mixtures of densities. This makes calculation
 MAP.approx <- conj.approx(MAP, type="beta", max.degree = 3)
 
 curve(MAP, n=200, lty=1, lwd=2, ylab="Density", xlab=expression(theta))
-plot(MAP.approx,  col="cyan", lwd=2, lty=2, lines.only=TRUE, las=1)
+plot(MAP.approx,  col="cyan", lwd=2, lty=2, add=TRUE, las=1)
 
 legend("topleft", lty=1:2, col=c("black","cyan"), lwd=2, legend=c("MAP","Approximation"))
 @

@@ -14,7 +14,7 @@
 #' nh <- c(90,95,110)
 #' fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
 #' post <- posterior.mixture.prior(34,75, mixture.prior = fix)  
-#' calc.MSE(posterior = fix, prob.range=c(0,1), n.binom=100)
+#' calc.MSE(posterior = post, prob.range=c(0,1), n.binom=100)
 #' }
 #' 
 calc.MSE <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, mc.cores=1, posterior){
@@ -48,12 +48,20 @@ calc.MSE <- function(prior, prob.range=c(.5,1), length=20, n.binom=30, mc.cores=
 
     }, mc.cores = mc.cores)
   } else if(!missing(posterior)){
-    MSE.for.x <- parallel::mclapply(posterior, function(post){
+    if(inherits(posterior, "mixture.prior")){
+      return((mean.mixture.prior(posterior)-P)^2 + var.mixture.prior(posterior))
+    } else if(inherits(posterior[[1]], "mixture.prior")){
+      #for a list of mixtures
+      MSE.for.x <- parallel::mclapply(posterior, function(post){
+        return((mean.mixture.prior(post)-P)^2 + var.mixture.prior(post))
+      })
+    } else {
+      MSE.for.x <- parallel::mclapply(posterior, function(post){
         sq.err <- function(p, true.p) post(p) * (p-true.p)^2
         return(sapply(P, function(true.p){
           adaptIntegrate(sq.err,0,1, true.p=true.p, maxEval=2e5)$integral})
         )}, mc.cores = mc.cores)
-  }
+  }}
 
 
   MSE.for.x <- matrix(unlist(MSE.for.x), nrow=length)

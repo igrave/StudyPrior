@@ -4,8 +4,8 @@
 \alias{plot.mixture.prior}
 \title{Plot mixture model}
 \usage{
-\method{plot}{mixture.prior}(x, ..., at = seq(0, 1, 0.01), stack = FALSE,
-  lines.only = FALSE)
+\method{plot}{mixture.prior}(x, ..., at = seq(0, 1, 0.005), stack = FALSE,
+  add = FALSE)
 }
 \arguments{
 \item{x}{a mixture prior object to plot}
@@ -16,7 +16,7 @@
 
 \item{stack}{Plot the mixture components as stacked regions}
 
-\item{lines.only}{Draw lines only (to be used over an existing plot)}
+\item{add}{lines to an existing plot}
 }
 \description{
 Plot mixture model
@@ -27,10 +27,10 @@ xh <- c(30,40,50)
 nh <- c(90,95,110)
 
 #fit a full Bayes power prior with 500 samples
-fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE) 
 
 #fit a full Bayes power prior with 500 samples and correlation 0.9
-fb2 <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
+fb2 <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE,d.prior.cor=0.9) 
 plot.mixture.prior(fb2, xlab="p",ylab="Density")
 plot.mixture.prior(fb, lines.only=TRUE, col=2)
 }

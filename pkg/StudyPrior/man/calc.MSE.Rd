@@ -32,7 +32,7 @@ xh <- c(30,40,50)
 nh <- c(90,95,110)
 fix <- binom.PP.FIX(x=xh, n=nh, d=c(.2,.5,.7), mix=TRUE) # set different weights
 post <- posterior.mixture.prior(34,75, mixture.prior = fix)  
-calc.MSE(posterior = fix, prob.range=c(0,1), n.binom=100)
+calc.MSE(posterior = post, prob.range=c(0,1), n.binom=100)
 }
 
 }

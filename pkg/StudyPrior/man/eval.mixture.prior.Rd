@@ -25,7 +25,7 @@ xh <- c(30,40,50)
 nh <- c(90,95,110)
 
 #fit a full Bayes power prior with 500 samples
-fb <- binom.PP.FB.COR(x=xh, n=nh, mixture.size=500, mix=TRUE) 
+fb <- binom.PP.FB(x=xh, n=nh, mixture.size=500, mix=TRUE) 
 eval.mixture.prior(seq(0,1,0.1), mixture.prior = fb) #Evalute the prior
 }
 }
