@@ -4,6 +4,7 @@ date: "11 June 2018"
 output:
   html_document:
     code_folding: hide
+    toc: yes
   pdf_document: default
 ---
 
