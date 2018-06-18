@@ -31,12 +31,14 @@ Install **INLA**
 >  `INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)`
 
 
+A separate file with the R code from this Workshop can be found at [https://igrave.github.io/StudyPrior/Workshop/code.R](https://igrave.github.io/StudyPrior/Workshop/code.R).
+
 ## Practical 1: Analysis of clinical trials using single historical control dataset
 
 **Data Description:** Taken from Neuenschwander 2010 clinical trials paper, designing a Phase IV trial comparing a control treatment and a new intensified treatment of the same compound.  The primary outcome is treatment failure (binary). There are 11 internal historical trials of essentially the same trial design. 
 
 
-```{r data}
+```{r Practical_1.data}
 
 library(StudyPrior)
 library(INLA)
@@ -56,7 +58,7 @@ knitr::kable(data.frame(Study = 1:11,
 
 A new study takes place and there are 12 failures out of 80 controls (15%) and 8 failures out of 80 people on the new intensified treatment (10%).
 
-```{r}
+```{r Practical_1.setup}
 x.c <- 12
 n.c <- 80
 
@@ -64,8 +66,8 @@ x.t <- 8
 n.t <- 80
 ```
 
-1. Take one historical study (different people should choose different studies, so we don’t all do the same one!) and calculate the probability that the new treatment is better than the “control” less intensive treatment (i.e. new treatment has lower failure rate) using each of the methods below. Complete the table below with the results from each analysis. You may also find it useful to produce plots of the posteriors for the control arm rate and for the treatment difference under each method.
-```{r}
+1. Take one historical study (different people should choose different studies, so we don't all do the same one!) and calculate the probability that the new treatment is better than the "control" less intensive treatment (i.e. new treatment has lower failure rate) using each of the methods below. Complete the table below with the results from each analysis. You may also find it useful to produce plots of the posteriors for the control arm rate and for the treatment difference under each method.
+```{r Practical_1.q1}
 my.choice <- 3
 
 x.h <- x.hist[[my.choice]]
@@ -73,7 +75,7 @@ n.h <- n.hist[[my.choice]]
 ```
     
   a. Only using the new study data (i.e. no historical data) (Hint: use simulation or numerical integration to compute Pr(treatment failure < control failure); see Lecture 2 slide 5)
-```{r}
+```{r Practical_1.q1a}
 #approximate with a Riemann sum
 p <- seq(0,1,len=2000)
 mean(dbeta(p, 1+x.c, 1+n.c-x.c) *
@@ -93,7 +95,7 @@ prob.control.smaller(xt=x.t, nt=n.t, posterior=q1.nohist.post)
 ```
     
   b. Pooling historical data (Hint: use simulation or numerical integration; see Lecture 2 slide 11-12)
-```{r}
+```{r Practical_1.q1b}
 q1.pool <- binom.PP.FIX(x=x.h, n=n.h, d=1, mix = TRUE)
 q1.pool.post <- posterior.mixture.prior(x.c, n.c, mix=q1.pool)
 prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.post)
@@ -101,7 +103,7 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.post)
   c. Using a power prior with fixed power parameters (Lecture 2 slide 14-15)
     + 0.8
     + 0.1
-```{r}
+```{r Practical_1.q1c}
 q1.pp08 <- binom.PP.FIX(x=x.h, n=n.h, d=0.8, mix = TRUE)
 q1.pp08.post <- posterior.mixture.prior(x.c, n.c, mix=q1.pp08)
 
@@ -115,7 +117,7 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pp01.post)
 
   d. Estimating the posterior mean of the power prior and using this as a plug-in value (Hint: to compute the posterior mean of a0 you will need to select an appropriate prior for a0. You will then need to use either simulation to sample directly from the posterior for a0 (see Lecture 2 slide 20; use proc mcmc) or numerical integration to compute the integral on slide 24 of Lecture 2)
 
-```{r}
+```{r Practical_1.q1d}
 f.a0 <- function(a0,Nh,Rh,N,R,a,b) {
   logf <- {lgamma(a0*Nh+a+b) + lgamma(a0*Rh+R+a) + lgamma(a0*(Nh-Rh)+N-R+b)}-
   {lgamma(a0*Rh+a) + lgamma(a0*(Nh-Rh)+b) + lgamma(a0*Nh+N+a+b)}
@@ -141,7 +143,7 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pp.mean.post)
     
   e. Estimating the power prior jointly with the control failure rate (see Lecture 2 slide 18)
     
-```{r}
+```{r Practical_1.q1e}
 q1.joint <- binom.PP.FB(x.h, n.h,  d.prior.a=1, d.prior.b=1, mix = TRUE)
 q1.joint.01 <- binom.PP.FB(x.h, n.h, d.prior.a=0.02, d.prior.b=0.02, mix = TRUE)
 
@@ -159,7 +161,7 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.joint.01.post)
   <!-- f. A commensurate prior approach (Hint: fit a full Bayesian model for historical and current data using proc mcmc; see Lecture 2 slide 26) -->
     
   g. Try to add a robust component to the different priors.
-```{r}
+```{r Practical_1.q1g}
 q1.pool.robust <- make.robust(q1.pool, 0.5)
 plot(q1.pool)
 plot(q1.pool.robust, add=TRUE, col=2)
@@ -176,8 +178,10 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.robust.post)
     
 2. If you have time, repeat some of the above with either a different historical trial or a different dataset for the new study.
 
-```{r}
+```{r Practical_1.q2}
 my.choice <- 7
+
+#Repeat as before
 ```
 
 
@@ -186,7 +190,7 @@ my.choice <- 7
 Using the historical trials from Neuenschwander 2010 introduced in Practical 1.
 
 1. Do a meta analysis of all the studies to obtain a meta-analytic predictive (MAP) prior distribution.
-```{r}
+```{r Practical_2.q1}
 
 q2.MAP <- binom.MAP.FB(x.hist, n.hist)
 ```
@@ -196,9 +200,9 @@ q2.MAP <- binom.MAP.FB(x.hist, n.hist)
 
     <!-- a. From the predictive distribution obtain the Rao-Blackwellised density estimates, and plot this density. -->
 
-  b. Fit a mixture of beta distributions to the MAP prior distribution with 1,2 and 3 components. Report the values of the fitted Beta parameters and the mixture weights for each fitted distribution.
+  a. Fit a mixture of beta distributions to the MAP prior distribution with 1,2 and 3 components. Report the values of the fitted Beta parameters and the mixture weights for each fitted distribution.
 
-```{r}
+```{r Practical_2.q2a}
 MAP4 <- conj.approx(q2.MAP, type="beta", max.degree = 4)
 MAP3 <- conj.approx(q2.MAP, type="beta", max.degree = 3)
 MAP2 <- conj.approx(q2.MAP, type="beta", max.degree = 2)
@@ -215,9 +219,9 @@ plot(MAP4, col=5, add=TRUE)
 
 ```
 
-  c. Compare the components to the fitted density using the Kullback-Leibler divergence criterion to decide upon the best fit
+  b. Compare the components to the fitted density using the Kullback-Leibler divergence criterion to decide upon the best fit
     
-```{r}
+```{r Practical_2.q2b}
 
 KLD <- function(prior){
   integrate(function(p) q2.MAP(p) *(log(q2.MAP(p)) - log(eval.mixture.prior(p,mixture=prior))),
@@ -237,7 +241,7 @@ KLD(MAP4)
 
   a. the best MAP prior approximation 
 
-```{r}
+```{r Practical_2.q3a}
 q2.MAP4.post <- posterior.mixture.prior(x.c,n.c, mix=MAP4)
 ```
 
@@ -245,13 +249,13 @@ q2.MAP4.post <- posterior.mixture.prior(x.c,n.c, mix=MAP4)
  b. a robust version of the MAP prior built by adding a fourth component Beta(1,1) with weight 0.1
 
 
-```{r}
+```{r Practical_2.q3b}
 q2.MAP.robust <- make.robust(MAP4, 0.1)
 q2.MAP.robust.post <- posterior.mixture.prior(x.c,n.c, mix=q2.MAP.robust)
 ```
 
  c. Fit a power prior with fixed parameter for all studies
-```{r}
+```{r Practical_2.q3c}
 q2.fix <- binom.PP.FIX(x.hist, n.hist, d=0.4 , mix = TRUE)
 q2.fix.diff <- binom.PP.FIX(x.hist, n.hist, d=rep(c(0.8,0.4), times=c(5,6)), mix = TRUE)
 
@@ -261,7 +265,7 @@ q2.fix.diff.post <- posterior.mixture.prior(x.c, n.c, mix=q2.fix.diff)
  
  
  d. Fit a power prior using the joint approach (as in 1e in practical 1). Choose the parameters for the prior on the the weights.
-```{r}
+```{r Practical_2.q3d}
 q2.FB <- binom.PP.FB(x.hist, n.hist,
                      d.prior.a = 1, d.prior.b=1,
                      p.prior.a = 1, p.prior.b = 1,
@@ -272,7 +276,7 @@ q2.FB.post <- posterior.mixture.prior(x.c, n.c, mix=q2.FB)
 
 
  e. Fit a power prior using the empirical Bayes approach to choose the parameters
-```{r}
+```{r Practical_2.q3e}
 q2.EB <- binom.PP.EB(x.hist, n.hist,X = x.c, n.c, mix = TRUE)
 attr(q2.EB,"powers")
 
@@ -281,7 +285,7 @@ q2.EB.post <- posterior.mixture.prior(x.c, n.c, mix=q2.EB)
  
  
  + For each analysis, compute the posterior probability that the new treatment is better than control, and also record the prior and posterior weights for each mixture component in the table below.
-```{r}
+```{r Practical_2.q3e2}
 prob.control.smaller(x.t,n.t, posterior=q2.MAP4.post)
 prob.control.smaller(x.t,n.t, posterior=q2.MAP.robust.post)
 
@@ -317,6 +321,7 @@ points(y=0, x=x.c/n.c)
 # n.c <- 320
 # x.t <- 32
 # n.t <- 320
+#Continue as before
 ```
 
 
@@ -328,14 +333,14 @@ points(y=0, x=x.c/n.c)
 1. Use the MAP prior that you fitted to all the historical control trials in Practical 2 to help design a new study.
 
 
-```{r}
+```{r Practical_3.q1}
 # q2.MAP
 q3.map <- MAP4
 ```
 
  a. Use a standard sample size calculation (Lecture 6 slide 13) to calculate the sample size for a new study ignoring the historical data to have 80% power and 5% type 1 error rate, and assuming that the control treatment has a 22% failure chance and the experimental treatment has a 15% failure chance 
 
-```{r}
+```{r Practical_3.q1a}
 power <- 0.8
 type1e <- 0.05
 p1 <- 0.22 #control failure
@@ -354,9 +359,9 @@ power.prop.test(n=NULL, p1,p2, type1e, power)
 
 ```
 
-  c. Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation – see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat < Control)>0.975).
+  c. Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation (see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat < Control)>0.975).
 
-```{r}
+```{r Practical_3.q1c}
 N.new <- 482
 #Calculate the posterior since we need it for the next questions
 q3.map.post <- lapply(0:N.new, posterior.mixture.prior, ns=N.new, mixture.prior=q3.map)
@@ -375,7 +380,7 @@ abline(v=0.22, lty=2)
 
   d. For the scenario in (c) above, compute the type 1 error for the trial design (Hint: use simulation as before, but generate replicate datasets under the null rather than alternative hypothesis).
 
-```{r}
+```{r Practical_3.q1d}
 # We can reuse the result of sig.matrix() since it doesn't depend on the treatment parameter or null/alternative hypothesis
 
 #we use calc.power with treatment.difference=0 to find the type 1 error
@@ -388,9 +393,9 @@ abline(v=0.22, lty=2)
 ```
 
 
-2. Repeat (b) – (d) in the previous question using the Robust MAP prior from Practical 3. If you have time, try different robust MAP priors with different weights on the robust component (e.g. 0.1 and 0.5). Comment on the differences in your results for the MAP prior and the different Robust MAP priors.  
+2. Repeat (b) - (d) in the previous question using the Robust MAP prior from Practical 3. If you have time, try different robust MAP priors with different weights on the robust component (e.g. 0.1 and 0.5). Comment on the differences in your results for the MAP prior and the different Robust MAP priors.  
 
-```{r}
+```{r Practical_3.q2}
 q3.rob.05 <- make.robust(q3.map, 0.5)
 q3.rob.01 <- make.robust(q3.map, 0.1)
 
@@ -414,7 +419,7 @@ q3c.power.05 <- calc.power(sig.mat = SIG.05, treatment.difference = 0.15-0.22, p
 
   a. Generate a single set of interim data collected on 241 control subjects and 241 treatment subjects on the number of failures in both treatments arms at the interim analysis. These data should be generated under the alternative hypothesis. 
 
-```{r}
+```{r Practical_3B.q1a}
 n.ci <- n.ti <- 241
 x.ci <- rbinom(1,241,p1)
 x.ti <- rbinom(1,241,p2)
@@ -423,7 +428,7 @@ x.ti <- rbinom(1,241,p2)
 
   b. How many more controls do you need to recruit in the remainder of the trial (after the interim) in order to achieve the target total control sample size of 482? Hint: this is similar to what you did for Practical 1 question (1d) but now you are combining the historical data with the interim data. First compute the posterior mean of the power prior parameter a0 using the interim control data. Then calculate the posterior distribution of the control rate at interim using the power prior with the posterior mean of a0 as a plug-in estimate to combine the historical data with the interim data set that you generated in (a). What is the effective sample size (ESS) of this interim posterior distribution? (See slide 12 of Lecture 6 and slide 20 of Lecture 2). How many more controls do you need to recruit in the remainder of the trial in order to achieve the target sample size of 482?
 
-```{r}
+```{r Practical_3B.q1b}
 f.a0 <- function(a0,Nh,Rh,N,R,a,b) {
   logf <- {lgamma(a0*Nh+a+b) + lgamma(a0*Rh+R+a) + lgamma(a0*(Nh-Rh)+N-R+b)}-
   {lgamma(a0*Rh+a) + lgamma(a0*(Nh-Rh)+b) + lgamma(a0*Nh+N+a+b)}
@@ -449,7 +454,7 @@ q3b.pp.interim <- posterior.mixture.prior(x.ci, n.ci,
   c. Using simulation confirm the conditional power of the new design at the planned treatment effect 
   (Hint – simulate replicate datasets under the alternative hypothesis for the remaining 241 subjects on treatment, and the remaining 482-ESS control subjects; for each replicate dataset compute the posterior probability that Pr(Treat < Control) and an indicator of whether this probability >0.975 by simulating from the appropriate posterior for the treatment and control rates (this is similar to the calculation of power for the MAP prior in qu 1c or Part A of Practical 5, but this time you should use the power prior for the control arm rather than MAP prior; make sure you include both the interim data and the predicted data for the rest of the trial when computing the posteriors).
 
-```{r}
+```{r  Practical_3B.q1c}
 
 n.c2 <- 481 - 282
 x.c2 <- 0:n.c2
@@ -474,7 +479,7 @@ q3c.power <- calc.power(sig.mat = SIG.q3c, treatment.difference = 0.15-0.22,
   d. Investigate the efficiency of the study design with and without the historical data, by repeating step c above but this time ignoring the historical data (Hint – simulate replicate datasets under the alternative for 241 remaining subjects on treatment and 241 remaining controls, and compute the posterior distributions assuming vague priors for both the treatment and control rates). Compare the conditional power of this design to that obtained in part c above. 
     
  
-```{r}
+```{r  Practical_3B.q1d}
 
 n.c2 <- 481 - 282
 x.c2 <- 0:n.c2

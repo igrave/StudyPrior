@@ -402,6 +402,7 @@ $(document).ready(function () {
 <blockquote>
 <p><code>install.packages(&quot;INLA&quot;, repos=c(getOption(&quot;repos&quot;),</code> <code>INLA=&quot;https://inla.r-inla-download.org/R/stable&quot;), dep=TRUE)</code></p>
 </blockquote>
+<p>A separate file with the R code from this Workshop can be found at <a href="https://igrave.github.io/StudyPrior/Workshop/code.R" class="uri">https://igrave.github.io/StudyPrior/Workshop/code.R</a>.</p>
 </div>
 <div id="practical-1-analysis-of-clinical-trials-using-single-historical-control-dataset" class="section level2">
 <h2>Practical 1: Analysis of clinical trials using single historical control dataset</h2>
@@ -426,7 +427,7 @@ n.c &lt;- 80
 x.t &lt;- 8
 n.t &lt;- 80</code></pre>
 <ol style="list-style-type: decimal">
-<li>Take one historical study (different people should choose different studies, so we donât all do the same one!) and calculate the probability that the new treatment is better than the âcontrolâ less intensive treatment (i.e. new treatment has lower failure rate) using each of the methods below. Complete the table below with the results from each analysis. You may also find it useful to produce plots of the posteriors for the control arm rate and for the treatment difference under each method.</li>
+<li>Take one historical study (different people should choose different studies, so we don’t all do the same one!) and calculate the probability that the new treatment is better than the “control” less intensive treatment (i.e. new treatment has lower failure rate) using each of the methods below. Complete the table below with the results from each analysis. You may also find it useful to produce plots of the posteriors for the control arm rate and for the treatment difference under each method.</li>
 </ol>
 <pre class="r"><code>my.choice &lt;- 3
 
@@ -524,7 +525,9 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.robust.post)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>If you have time, repeat some of the above with either a different historical trial or a different dataset for the new study.</li>
 </ol>
-<pre class="r"><code>my.choice &lt;- 7</code></pre>
+<pre class="r"><code>my.choice &lt;- 7
+
+#Repeat as before</code></pre>
 </div>
 <div id="practical-2-analysis-of-clinical-trial-using-multiple-historical-control-datasets" class="section level2">
 <h2>Practical 2: Analysis of clinical trial using multiple historical control datasets</h2>
@@ -537,7 +540,7 @@ prob.control.smaller(xt=x.t,nt=n.t,posterior=q1.pool.robust.post)</code></pre>
 <li><p>Complete the following steps to fit a mixture of beta distributions to approximate the MAP prior:</p>
 <p><!-- a. From the predictive distribution obtain the Rao-Blackwellised density estimates, and plot this density. --></p></li>
 </ol>
-<ol start="2" style="list-style-type: lower-alpha">
+<ol style="list-style-type: lower-alpha">
 <li>Fit a mixture of beta distributions to the MAP prior distribution with 1,2 and 3 components. Report the values of the fitted Beta parameters and the mixture weights for each fitted distribution.</li>
 </ol>
 <pre class="r"><code>MAP4 &lt;- conj.approx(q2.MAP, type=&quot;beta&quot;, max.degree = 4)
@@ -552,7 +555,7 @@ plot(MAP1, col=2, add=TRUE)
 plot(MAP2, col=3, add=TRUE)
 plot(MAP3, col=4, add=TRUE)
 plot(MAP4, col=5, add=TRUE)</code></pre>
-<ol start="3" style="list-style-type: lower-alpha">
+<ol start="2" style="list-style-type: lower-alpha">
 <li>Compare the components to the fitted density using the Kullback-Leibler divergence criterion to decide upon the best fit</li>
 </ol>
 <pre class="r"><code>KLD &lt;- function(prior){
@@ -630,7 +633,8 @@ points(y=0, x=x.c/n.c)</code></pre>
 <pre class="r"><code># x.c &lt;- 36
 # n.c &lt;- 320
 # x.t &lt;- 32
-# n.t &lt;- 320</code></pre>
+# n.t &lt;- 320
+#Continue as before</code></pre>
 </div>
 <div id="practical-3-designing-at-trial-that-includes-historical-controls" class="section level2">
 <h2>Practical 3: Designing at trial that includes historical controls</h2>
@@ -653,7 +657,7 @@ p2 &lt;-  0.15 # experimental treatment failure
 power.prop.test(n=NULL, p1,p2, type1e, power)</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li><p>Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)</p></li>
-<li><p>Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation â see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat &lt; Control)&gt;0.975).</p></li>
+<li><p>Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation (see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat &lt; Control)&gt;0.975).</p></li>
 </ol>
 <pre class="r"><code>N.new &lt;- 482
 #Calculate the posterior since we need it for the next questions
@@ -681,7 +685,7 @@ q3c.t1e &lt;- calc.power(sig.mat = SIG, treatment.difference = 0,
 plot(y=q3c.t1e, x=seq(0.1,0.5,len=40), xlab=&quot;Control Probability&quot;, ylab=&quot;Type I Error&quot;, ty='b')
 abline(v=0.22, lty=2)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Repeat (b) â (d) in the previous question using the Robust MAP prior from Practical 3. If you have time, try different robust MAP priors with different weights on the robust component (e.g. 0.1 and 0.5). Comment on the differences in your results for the MAP prior and the different Robust MAP priors.</li>
+<li>Repeat (b) - (d) in the previous question using the Robust MAP prior from Practical 3. If you have time, try different robust MAP priors with different weights on the robust component (e.g. 0.1 and 0.5). Comment on the differences in your results for the MAP prior and the different Robust MAP priors.</li>
 </ol>
 <pre class="r"><code>q3.rob.05 &lt;- make.robust(q3.map, 0.5)
 q3.rob.01 &lt;- make.robust(q3.map, 0.1)
