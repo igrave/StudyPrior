@@ -11,11 +11,25 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, eval=FALSE)
 ```
 
-Install the R packages StudyPrior and INLA to get started:
+## Getting Started
 
-> devtools::install_github("igrave/StudyPrior")
+Install **StudyPrior** package
 
-> install.packages("INLA", repos=c(getOption("repos"), INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
+> `devtools::install_github('igrave/StudyPrior/StudyPrior')`
+
+*or* download from
+
+> [`https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.zip` (for Windows)](https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.tar.gz)
+
+
+> [`https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.tar.gz` (source package)](https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.tar.gz)
+
+
+Install **INLA** 
+
+> `install.packages("INLA", repos=c(getOption("repos"),`
+>  `INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)`
+
 
 ## Practical 1: Analysis of clinical trials using single historical control dataset
 
@@ -257,7 +271,7 @@ q2.FB.post <- posterior.mixture.prior(x.c, n.c, mix=q2.FB)
 ```
 
 
- e. Fit a power prior using the emprical Bayes approach to choose the parameters
+ e. Fit a power prior using the empirical Bayes approach to choose the parameters
 ```{r}
 q2.EB <- binom.PP.EB(x.hist, n.hist,X = x.c, n.c, mix = TRUE)
 attr(q2.EB,"powers")
