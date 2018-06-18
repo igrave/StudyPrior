@@ -18,7 +18,11 @@ Install **StudyPrior** package
 
 > `devtools::install_github('igrave/StudyPrior/StudyPrior')`
 
-*or* download from
+*or* install manually the dependencies and the package.
+
+> `for(dep in c('cubature','parallel','optimr','optimx','VGAM','BB','mvtnorm')) {`
+>`if (!require(dep, character.only=TRUE)) install.packages(dep)}`
+
 
 > [`https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.zip` (for Windows)](https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.tar.gz)
 
@@ -33,6 +37,10 @@ Install **INLA**
 
 
 A separate file with the R code from this Workshop can be found at [https://igrave.github.io/StudyPrior/Workshop/code.R](https://igrave.github.io/StudyPrior/Workshop/code.R).
+
+## Short Introduction
+
+The StudyPrior package provides some useful functions 
 
 ## Practical 1: Analysis of clinical trials using single historical control dataset
 
@@ -356,7 +364,11 @@ power.prop.test(n=NULL, p1,p2, type1e, power)
 
   b. Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)
 
-```{r}
+```{r Practical_3.q1b}
+q3.map.ess <- ess.morita.mixture.prior(q3.map,LEN = 500) #takes about 2 minutes
+
+q3.map.ess
+
 
 ```
 

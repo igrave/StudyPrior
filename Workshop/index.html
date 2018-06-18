@@ -387,6 +387,7 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#short-introduction">Short Introduction</a></li>
 <li><a href="#practical-1-analysis-of-clinical-trials-using-single-historical-control-dataset">Practical 1: Analysis of clinical trials using single historical control dataset</a></li>
 <li><a href="#practical-2-analysis-of-clinical-trial-using-multiple-historical-control-datasets">Practical 2: Analysis of clinical trial using multiple historical control datasets</a></li>
 <li><a href="#practical-3-designing-at-trial-that-includes-historical-controls">Practical 3: Designing at trial that includes historical controls</a></li>
@@ -399,7 +400,10 @@ $(document).ready(function () {
 <blockquote>
 <p><code>devtools::install_github('igrave/StudyPrior/StudyPrior')</code></p>
 </blockquote>
-<p><em>or</em> download from</p>
+<p><em>or</em> install manually the dependencies and the package.</p>
+<blockquote>
+<p><code>for(dep in c('cubature','parallel','optimr','optimx','VGAM','BB','mvtnorm')) {</code> <code>if (!require(dep, character.only=TRUE)) install.packages(dep)}</code></p>
+</blockquote>
 <blockquote>
 <p><a href="https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.tar.gz"><code>https://igrave.github.io/StudyPrior/packages/StudyPrior_0.0.15.zip</code> (for Windows)</a></p>
 </blockquote>
@@ -411,6 +415,10 @@ $(document).ready(function () {
 <p><code>install.packages(&quot;INLA&quot;, repos=c(getOption(&quot;repos&quot;),</code> <code>INLA=&quot;https://inla.r-inla-download.org/R/stable&quot;), dep=TRUE)</code></p>
 </blockquote>
 <p>A separate file with the R code from this Workshop can be found at <a href="https://igrave.github.io/StudyPrior/Workshop/code.R" class="uri">https://igrave.github.io/StudyPrior/Workshop/code.R</a>.</p>
+</div>
+<div id="short-introduction" class="section level2">
+<h2>Short Introduction</h2>
+<p>The StudyPrior package provides some useful functions</p>
 </div>
 <div id="practical-1-analysis-of-clinical-trials-using-single-historical-control-dataset" class="section level2">
 <h2>Practical 1: Analysis of clinical trials using single historical control dataset</h2>
@@ -664,8 +672,13 @@ p2 &lt;-  0.15 # experimental treatment failure
 
 power.prop.test(n=NULL, p1,p2, type1e, power)</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
-<li><p>Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)</p></li>
-<li><p>Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation (see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat &lt; Control)&gt;0.975).</p></li>
+<li>Using the historical data, by how much could you reduce the sample size by? (Hint calculate the ESS of the MAP prior; see Lecture 6 slides 7-10)</li>
+</ol>
+<pre class="r"><code>q3.map.ess &lt;- ess.morita.mixture.prior(q3.map,LEN = 500) #takes about 2 minutes
+)
+q3.map.ess</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Alternatively you could use the historical data to increase the power of the new study by recruiting the full sample size (as calculated in part a) and including the historical data via the MAP prior. What is the new power of this study? (Hint: This can be done via simulation (see Lecture 6 slide 15. In order to compute power for a Bayesian analysis, you should define the success criterion for a trial to be Pr(Treat &lt; Control)&gt;0.975).</li>
 </ol>
 <pre class="r"><code>N.new &lt;- 482
 #Calculate the posterior since we need it for the next questions
