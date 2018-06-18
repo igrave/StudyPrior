@@ -16,7 +16,7 @@ binom.Bias.FB(x, n, verbose = FALSE, mc.cores = 1)
 \item{mc.cores}{number of cores for parallel}
 }
 \value{
-A function of the probability parmater p
+A function of the probability paramater p
 }
 \description{
 Full Bayes Bias Prior for Binomial Data

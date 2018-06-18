@@ -36,7 +36,6 @@ export(normal.PP.EB)
 export(normal.PP.FB.COR)
 
 export(p.mixture.prior)
-
 export(var.mixture.prior)
 export(mean.mixture.prior)
 export(plot.mixture.prior)
@@ -44,6 +43,8 @@ export(eval.mixture.prior)
 export(posterior.mixture.prior)
 export(q.mixture.prior)
 export(sample.mixture.prior)
+export(ess.morita.mixture.prior)
+
 export(sig.matrix)
 export(prob.control.smaller)
 export(make.robust)

@@ -5,7 +5,7 @@
 #' @param verbose Print messages
 #' @param mc.cores number of cores for parallel
 #'
-#' @return A function of the probability parmater p
+#' @return A function of the probability paramater p
 #'
 #'
 binom.Bias.FB <- function(x, n, verbose=FALSE,  mc.cores=1){

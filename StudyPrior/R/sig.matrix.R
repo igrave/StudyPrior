@@ -198,7 +198,7 @@ prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
 }
 
 
-#' Calculate if the the control parameter is smaller than the treatment parameter
+#' Compare the the control parameter and the treatment parameter
 #'
 #' @param xt number of events in the treatment arm
 #' @param nt number of of patients in the treatment arm
@@ -207,9 +207,10 @@ prXY <- function(a,b,c,d, approx.allowed=TRUE, force=FALSE){
 #' @param xc number of events in the control arm
 #' @param nc number of patients in the control 
 #'
-#' @return the probability the control parameter is smaller than the treatment parameter
+#' @return The probability the control parameter is smaller/larger than the treatment parameter. 
+#' \code{prob.control.smaller} is \code{1-prob.control.larger} and is provided for convenience.
 #'
-prob.control.smaller <- function(xt,nt, posterior, xc,nc, prior){
+prob.control.larger <- function(xt,nt, posterior, xc,nc, prior){
   if(missing(posterior)) posterior <- posterior.mixture.prior(xs=xt, ns=nt, mixture.prior = prior)
   
   w <- attr(posterior,"weights")
@@ -227,10 +228,12 @@ prob.control.smaller <- function(xt,nt, posterior, xc,nc, prior){
     prXY(xt+1,nt-xt+1, par[,1],par[,2], approx.allowed=FALSE, force=FALSE)  %*% w
   }) -> prob
   
-  1-prob
+  prob
 }
 
 
 
-
-
+#' @rdname prob.control.larger
+prob.control.smaller <- function(xt,nt, posterior, xc,nc, prior){
+  1- prob.control.larger(xt,nt, posterior, xc,nc, prior)
+}
