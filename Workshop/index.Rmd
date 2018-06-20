@@ -42,6 +42,7 @@ To see vignette on using StudyPrior package:
 
 > `??StudyPrior`
 
+or [online here](https://igrave.github.io/StudyPrior/Workshop/Vignette.pdf).
 
 ## Practical 1: Analysis of clinical trials using single historical control dataset
 
