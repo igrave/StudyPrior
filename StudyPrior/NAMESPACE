@@ -47,6 +47,7 @@ export(ess.morita.mixture.prior)
 
 export(sig.matrix)
 export(prob.control.smaller)
+export(prob.control.larger)
 export(make.robust)
 
 export(install.inla)
@@ -64,6 +65,6 @@ importFrom("stats", "approxfun", "dbeta", "dbinom", "dnorm", "qbeta",
              "uniroot", "weights")
 
 importFrom("cubature", "adaptIntegrate")
-
+ importFrom("stats", ".lm.fit", "lm")
 
 importFrom("VGAM", 'dbetabinom.ab')

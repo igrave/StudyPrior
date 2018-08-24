@@ -33,9 +33,9 @@ binom.MAP.FB <- function(x, n, tau.prior,verbose=FALSE){
     prior <- tau.prior
   }
 
-  formula <- 
+ 
 
-  result <- INLA::inla(x ~ 1 + f(z, model="iid", hyper = list(theta = prior)),
+  result <- inla(x ~ 1 + f(z, model="iid", hyper = list(theta = prior)),
                        data = dat,
                        family = "binomial",
                        control.fixed = list(mean.intercept = 0, prec.intercept = 1/sqrt(pi^2 /3)),
@@ -68,7 +68,7 @@ Y <- result$marginals.fitted.values[[n.hist+1]][,2]
                  method = "monoH")
  
  
-  rm(dat, formula, n, n.hist, prior, result, tau.prior, verbose, x)
+  rm(dat,  n, n.hist, prior, result, tau.prior, verbose, x)
 
 
    function(p,X) {
