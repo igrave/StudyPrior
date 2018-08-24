@@ -2,14 +2,17 @@
 %\VignetteIndexEntry{Using StudyPrior}
 %\VignetteEngine{knitr::knitr}
 \usepackage{parskip}
-\usepackage[a4paper, total={6.5in,9in}]{geometry}
+\usepackage[a4paper, total={6.6in,9in}]{geometry}
 \usepackage{natbib}
 
 \begin{document}
 
-\author{Isaac Gravestock}
+\author{Isaac Gravestock\\{https://github.com/igrave/StudyPrior}}
+
 \title{StudyPrior for Binary Outcomes}
 \maketitle
+
+
 
 The StudyPrior package implements a number of Bayesian priors used for clinical trials.
 This vignette shows the methods for trials with a binary outcome.
@@ -25,7 +28,7 @@ if(require(INLA, quietly=TRUE)) INLA.available <-TRUE else{
   INLA.available <- FALSE
   print('INLA package not available. Examples using INLA will not be evaluated')
 }
-knitr::opts_knit$set(global.par=TRUE)
+knitr::opts_knit$set(global.par=TRUE, cache=TRUE)
 par(las=1)
 
 @
@@ -165,7 +168,10 @@ With multiple historical studies, we can use the meta-analytic predictive prior 
 x.multi <- c(21,33,23,27)
 n.multi <- c(37,50,40,50)
 
-if(INLA.available) MAP <- binom.MAP.FB(x.multi, n.multi, tau.prior = list(prior= "logtnormal", param=c(0,1)))
+if(INLA.available){
+  MAP <- binom.MAP.FB(x.multi, n.multi,
+                      tau.prior = list(prior= "logtnormal", param=c(0,1)))
+} 
 @
 
 The power prior can also be extended to hand multiple studies. A full Bayes approach with an independent beta prior on the weight parameters.
@@ -194,7 +200,8 @@ MAP.approx <- conj.approx(MAP, type="beta", max.degree = 3)
 curve(MAP, n=200, lty=1, lwd=2, ylab="Density", xlab=expression(theta))
 plot(MAP.approx,  col="cyan", lwd=2, lty=2, add=TRUE, las=1)
 
-legend("topleft", lty=1:2, col=c("black","cyan"), lwd=2, legend=c("MAP","Approximation"))
+legend("topleft", lty=1:2, col=c("black","cyan"), lwd=2,
+       legend=c("MAP","Approximation"))
 @
 
 
@@ -215,8 +222,10 @@ BIAS.PP <- sapply(list(PP.FB.11, PP.FB.55, PP.FB.COR, PP.EB),
 
 We can also use the mixture approximations in the same functions. Note how much faster the calculations are with the approximation.
 <<biasmap, eval=INLA.available>>=
-system.time(BIAS.MAP <- calc.bias(MAP, prob.range = c(0.3,0.8),length=11,n.binom = 50))
-system.time(BIAS.APPROX <- calc.bias(MAP.approx, prob.range = c(0.3,0.8),length=11,n.binom = 50))
+system.time(BIAS.MAP <-
+              calc.bias(MAP, prob.range = c(0.3,0.8),length=11,n.binom = 50))
+system.time(BIAS.APPROX <-
+              calc.bias(MAP.approx, prob.range = c(0.3,0.8),length=11,n.binom = 50))
 @
 
 <<biasplot>>=
