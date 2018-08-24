@@ -1,7 +1,7 @@
 An R package implementing methods to construct priors from historical data.
 
 For examples see
-https://igrave.github.io/Binomial_knitr.pdf
+https://igrave.github.io/StudyPrior/Binomial_knitr.pdf
 https://igrave.github.io/StudyPrior/Workshop/
 
 To install
