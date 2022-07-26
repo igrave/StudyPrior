@@ -4,8 +4,17 @@
 \alias{normal.PP.FB.MC}
 \title{Normal power prior with full Bayes by Monte Carlo}
 \usage{
-normal.PP.FB.MC(x, sd, verbose = FALSE, length = 30, d.prior.a = 1,
-  d.prior.b = 1, mc.cores = 1, samples = 10000, focus)
+normal.PP.FB.MC(
+  x,
+  sd,
+  verbose = FALSE,
+  length = 30,
+  d.prior.a = 1,
+  d.prior.b = 1,
+  mc.cores = 1,
+  samples = 10000,
+  focus
+)
 }
 \arguments{
 \item{x}{numeric vector of results}

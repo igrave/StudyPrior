@@ -7,6 +7,7 @@
 
 \begin{document}
 
+
 \author{Isaac Gravestock\\{https://github.com/igrave/StudyPrior}}
 
 \title{StudyPrior for Binary Outcomes}
@@ -171,7 +172,7 @@ n.multi <- c(37,50,40,50)
 if(INLA.available){
   MAP <- binom.MAP.FB(x.multi, n.multi,
                       tau.prior = list(prior= "logtnormal", param=c(0,1)))
-} 
+}
 @
 
 The power prior can also be extended to hand multiple studies. A full Bayes approach with an independent beta prior on the weight parameters.

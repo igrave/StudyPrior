@@ -4,8 +4,7 @@
 \alias{plot.mixture.prior}
 \title{Plot mixture model}
 \usage{
-\method{plot}{mixture.prior}(x, ..., at = seq(0, 1, 0.005), stack = FALSE,
-  add = FALSE)
+\method{plot}{mixture.prior}(x, ..., at = seq(0, 1, 0.005), stack = FALSE, add = FALSE)
 }
 \arguments{
 \item{x}{a mixture prior object to plot}

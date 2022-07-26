@@ -4,8 +4,18 @@
 \alias{binom.PP.EB}
 \title{Empirical Bayes Power Prior for Binomial Data}
 \usage{
-binom.PP.EB(x, n, X, N, verbose = FALSE, mc.cores = 1, p.prior.a = 1,
-  p.prior.b = 1, max.dn = FALSE, mix = FALSE)
+binom.PP.EB(
+  x,
+  n,
+  X,
+  N,
+  verbose = FALSE,
+  mc.cores = 1,
+  p.prior.a = 1,
+  p.prior.b = 1,
+  max.dn = FALSE,
+  mix = FALSE
+)
 }
 \arguments{
 \item{x}{number of historical successes}

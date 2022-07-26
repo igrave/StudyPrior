@@ -4,9 +4,18 @@
 \alias{conj.approx}
 \title{Approximate distribution with mixture model}
 \usage{
-conj.approx(distr, type = c("beta", "normal"), max.degree = 3,
-  min.degree = max.degree, robust = FALSE, range = c(0, 1),
-  do.plot = FALSE, return.value = 0.2, starts, length.fit = 100)
+conj.approx(
+  distr,
+  type = c("beta", "normal"),
+  max.degree = 3,
+  min.degree = max.degree,
+  robust = FALSE,
+  range = c(0, 1),
+  do.plot = FALSE,
+  return.value = 0.2,
+  starts,
+  length.fit = 100
+)
 }
 \arguments{
 \item{distr}{The density function of the function to be approximated}

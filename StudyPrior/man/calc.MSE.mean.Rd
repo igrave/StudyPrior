@@ -4,8 +4,14 @@
 \alias{calc.MSE.mean}
 \title{Calculate mean squared error based on the mean of the posterior}
 \usage{
-calc.MSE.mean(prior, prob.range = c(0.5, 1), length = 20, n.binom = 30,
-  mc.cores = 1, posterior)
+calc.MSE.mean(
+  prior,
+  prob.range = c(0.5, 1),
+  length = 20,
+  n.binom = 30,
+  mc.cores = 1,
+  posterior
+)
 }
 \arguments{
 \item{prior}{Prior to calculate posterior. Specify posterior instead if available.}
