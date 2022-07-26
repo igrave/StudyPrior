@@ -4,8 +4,14 @@
 \alias{calc.MSE.mode}
 \title{Calculate mean squared error based on the mode of the posterior}
 \usage{
-calc.MSE.mode(prior, prob.range = c(0.5, 1), length = 20, n.binom = 30,
-  mc.cores = 1, posterior)
+calc.MSE.mode(
+  prior,
+  prob.range = c(0.5, 1),
+  length = 20,
+  n.binom = 30,
+  mc.cores = 1,
+  posterior
+)
 }
 \arguments{
 \item{prior}{Prior to calculate posterior. Specify posterior instead if available.}

@@ -4,8 +4,15 @@
 \alias{calc.bias}
 \title{Calculate bias}
 \usage{
-calc.bias(prior, prob.range = c(0.5, 1), length = 20, n.binom = 30,
-  posterior, mc.cores = 1, type = "mean")
+calc.bias(
+  prior,
+  prob.range = c(0.5, 1),
+  length = 20,
+  n.binom = 30,
+  posterior,
+  mc.cores = 1,
+  type = "mean"
+)
 }
 \arguments{
 \item{prior}{Prior to calculate posterior. Specify posterior instead if available.}

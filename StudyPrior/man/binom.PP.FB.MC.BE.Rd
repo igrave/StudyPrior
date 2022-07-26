@@ -4,9 +4,19 @@
 \alias{binom.PP.FB.MC.BE}
 \title{Full Bayes Power Prior with Beta Prior on Weights}
 \usage{
-binom.PP.FB.MC.BE(x, n, verbose = FALSE, length = 30, d.prior.a = 1,
-  d.prior.b = 1, p.prior.a = 1, p.prior.b = 1, mc.cores = 1,
-  samples = 10000, focus)
+binom.PP.FB.MC.BE(
+  x,
+  n,
+  verbose = FALSE,
+  length = 30,
+  d.prior.a = 1,
+  d.prior.b = 1,
+  p.prior.a = 1,
+  p.prior.b = 1,
+  mc.cores = 1,
+  samples = 10000,
+  focus
+)
 }
 \arguments{
 \item{x}{number of historical successes}

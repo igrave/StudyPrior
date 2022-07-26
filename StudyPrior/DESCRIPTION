@@ -1,9 +1,9 @@
 Package: StudyPrior
 Type: Package
 Title: Construct Prior Distributions from Historical Information
-Version: 0.0.15
+Version: 0.0.16
 Authors@R: c(person("Isaac", "Gravestock", role = c("aut", "cre"),
-                     email = "isaac.gravestock@uzh.ch",
+                     email = "isaac.gravestock@gmail.com",
                       comment = c(ORCID = "0000-0003-0283-2065")))
 Maintainer: Isaac Gravestock <isaac.gravestock@uzh.ch>
 Description: Implements useful prior distributions for incorporating data from previous studies into a new study, such as meta-analytic priors (Schmidli et al.(2014) <doi:10.1111/biom.12242>) and power priors (Gravestock and Held (2018) <arXiv:1708.08239>.
@@ -23,7 +23,5 @@ Suggests: knitr, INLA
 Additional_repositories:
     https://inla.r-inla-download.org/R/stable
 VignetteBuilder: knitr 
-RoxygenNote: 6.0.1
+RoxygenNote: 7.2.0
 ByteCompile: true
-
-

@@ -4,9 +4,17 @@
 \alias{calc.power}
 \title{Calculate power}
 \usage{
-calc.power(prior, prob.range = c(0.5, 0.9), length = 20,
-  n.binom.control = 30, n.binom.treatment = n.binom.control,
-  treatment.difference = 0.1, level = 0.95, sig.mat, LR = FALSE)
+calc.power(
+  prior,
+  prob.range = c(0.5, 0.9),
+  length = 20,
+  n.binom.control = 30,
+  n.binom.treatment = n.binom.control,
+  treatment.difference = 0.1,
+  level = 0.95,
+  sig.mat,
+  LR = FALSE
+)
 }
 \arguments{
 \item{prior}{Prior to calculate posterior}

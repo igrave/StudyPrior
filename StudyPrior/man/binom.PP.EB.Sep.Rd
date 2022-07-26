@@ -4,8 +4,16 @@
 \alias{binom.PP.EB.Sep}
 \title{Empirical Bayes Power Prior for Binomial Data with the power parameters esimated separately}
 \usage{
-binom.PP.EB.Sep(x, n, X, N, verbose = FALSE, p.prior.a = 1, p.prior.b = 1,
-  mix = FALSE)
+binom.PP.EB.Sep(
+  x,
+  n,
+  X,
+  N,
+  verbose = FALSE,
+  p.prior.a = 1,
+  p.prior.b = 1,
+  mix = FALSE
+)
 }
 \arguments{
 \item{x}{number of historical successes}

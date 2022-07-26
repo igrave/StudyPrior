@@ -4,8 +4,18 @@
 \alias{binom.PP.FB.MC.COR}
 \title{Full Bayes Power Prior with Correlated Weight Parameters}
 \usage{
-binom.PP.FB.MC.COR(x, n, verbose = FALSE, length = 200, d.prior.cor = 0,
-  p.prior.a = 1, p.prior.b = 1, mc.cores = 1, samples = 10000, focus)
+binom.PP.FB.MC.COR(
+  x,
+  n,
+  verbose = FALSE,
+  length = 200,
+  d.prior.cor = 0,
+  p.prior.a = 1,
+  p.prior.b = 1,
+  mc.cores = 1,
+  samples = 10000,
+  focus
+)
 }
 \arguments{
 \item{x}{number of historical successes}

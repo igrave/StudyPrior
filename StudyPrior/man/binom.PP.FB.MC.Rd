@@ -4,8 +4,17 @@
 \alias{binom.PP.FB.MC}
 \title{Full Bayes Power Prior}
 \usage{
-binom.PP.FB.MC(x, n, verbose = FALSE, length = 30, d.prior.a = 1,
-  d.prior.b = 1, mc.cores = 1, samples = 10000, focus)
+binom.PP.FB.MC(
+  x,
+  n,
+  verbose = FALSE,
+  length = 30,
+  d.prior.a = 1,
+  d.prior.b = 1,
+  mc.cores = 1,
+  samples = 10000,
+  focus
+)
 }
 \arguments{
 \item{x}{number of historical successes}

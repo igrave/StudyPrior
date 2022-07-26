@@ -4,8 +4,14 @@
 \alias{normal.PP.FB.COR}
 \title{Full Bayes Power Prior with Correlated Weight Parameters using Rao-Blackwell}
 \usage{
-normal.PP.FB.COR(x, sd, verbose = FALSE, mixture.size = 1000,
-  d.prior.cor = 0, mc.cores = 1)
+normal.PP.FB.COR(
+  x,
+  sd,
+  verbose = FALSE,
+  mixture.size = 1000,
+  d.prior.cor = 0,
+  mc.cores = 1
+)
 }
 \arguments{
 \item{x}{vector of means of historical studies}
